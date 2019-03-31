@@ -6,13 +6,13 @@ module.exports = {
   options: {
     validate: { payload: schema,
       failAction: async (request, h, error) => {
-        console.log(`rejected payload ${payload}`)
+        console.log(`rejected payload ${request.payload}`)
         return h.response().code(400)
       }
     },
     handler: async (request, h) => {
       console.log('new user received')
-      
+
       return h.response().code(200)
     }
   }
