@@ -1,4 +1,5 @@
 const schema = require('../schema/user')
+const userService = require('../services/user-service')
 
 module.exports = {
   method: 'POST',
@@ -12,8 +13,8 @@ module.exports = {
     },
     handler: async (request, h) => {
       console.log('new user received')
-
-      return h.response().code(200)
+      let user = await userService.create(request.payload)
+      return h.response(user).code(200)
     }
   }
 }
