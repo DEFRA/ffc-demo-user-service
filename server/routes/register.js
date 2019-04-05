@@ -13,7 +13,7 @@ module.exports = {
     },
     handler: async (request, h) => {
       console.log('new user received')
-      let user = await userService.create(request.payload)
+      const user = await userService.create(request.payload)
       return h.response(user).code(200)
     }
   }

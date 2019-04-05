@@ -14,7 +14,7 @@ module.exports = {
   },
   create: async function (user) {
     try {
-      let userRecord = await db.users.upsert({
+      const userRecord = await db.users.upsert({
         email: user.email
       })
 
