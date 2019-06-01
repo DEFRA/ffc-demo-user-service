@@ -1,0 +1,22 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app.component: user-service
+  name: user-service
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app.component: user-service
+    spec:
+      containers:   
+      - name: mine-support-user-service
+        image: mine-support-user-service
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 3002               
+      restartPolicy: Always
+status: {}
