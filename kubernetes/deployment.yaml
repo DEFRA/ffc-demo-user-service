@@ -44,6 +44,9 @@ spec:
       - name: mine-support-user-service
         image: mine-support-user-service
         imagePullPolicy: Never
+        env:                
+        - name: NODE_ENV
+          value: production
         ports:
         - containerPort: 3002               
       restartPolicy: Always
