@@ -1,0 +1,26 @@
+environment: development
+containers:
+  service:
+    name: mine-support-user-service
+    port: 3002
+    registry:
+    image: mine-support-user-service
+    tag: latest
+    imagePullPolicy: IfNotPresent
+    requestMemory: 30Mi
+    requestCpu: 10m
+    limitMemory: 60Mi
+    limitCpu: 40m
+    runAsNonRoot: true
+    runAsUser: 1000
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    restartPolicy: Always   
+database:
+  name: mine-support-postgres-users
+  externalName: host.docker.internal
+  port: 5432    
+replicas: 2
+minReadySeconds: 10
+maxSurge: 1
+maxUnavailable: 1
