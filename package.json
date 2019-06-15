@@ -17,7 +17,7 @@
     "pg": "^7.9.0",
     "pg-hstore": "^2.3.2",
     "proxyquire": "^2.1.0",
-    "sequelize": "^5.2.8",
+    "sequelize": "^6.0.0",
     "sinon": "^7.3.1"
   },
   "devDependencies": {
@@ -28,7 +28,7 @@
     "good-console": "7.1.0",
     "good-file": "6.0.1",
     "good-squeeze": "5.1.0",
-    "lab": "17.3.0",
+    "lab": "^18.0.2",
     "standard": "12.0.1"
   }
 }
