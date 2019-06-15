@@ -2,5 +2,3 @@ environment: production
 containers:
   service:
     registry: 'minesupport.azurecr.io'
-database:
-  externalName: mine-support.postgres.database.azure.com
