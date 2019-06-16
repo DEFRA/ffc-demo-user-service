@@ -20,7 +20,7 @@ database:
   name: mine-support-postgres-users
   externalName: host.docker.internal
   port: 5432    
-replicas: 2
+replicas: 1
 minReadySeconds: 10
 maxSurge: 1
 maxUnavailable: 1
