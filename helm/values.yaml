@@ -1,4 +1,6 @@
 environment: development
+postgresUsername: postgres@mine-support2
+postgresPassword: changeme
 containers:
   service:
     name: mine-support-user-service
@@ -15,11 +17,11 @@ containers:
     runAsUser: 1000
     readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
-    restartPolicy: Always   
+    restartPolicy: Always
 database:
   name: mine-support-postgres-users
   externalName: host.docker.internal
-  port: 5432    
+  port: 5432
 replicas: 1
 minReadySeconds: 10
 maxSurge: 1
