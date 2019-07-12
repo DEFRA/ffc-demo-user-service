@@ -1,4 +1,4 @@
-[![Build status](https://defradev.visualstudio.com/DEFRA_FutureFarming/_apis/build/status/defra-ff-mine-support-user-service-spike)](https://defradev.visualstudio.com/DEFRA_FutureFarming/_build/latest?definitionId=0)
+[![Build status](https://defradev.visualstudio.com/DEFRA_FutureFarming/_apis/build/status/defra-ff-mine-support-user-service)](https://defradev.visualstudio.com/DEFRA_FutureFarming/_build/latest?definitionId=562)
 
 # Mine Support User Service
 Digital service mock to claim public money in the event property subsides into mine shaft.  The user service receives user data and if it doesn’t already exist saves it in a Postgresql database table.
