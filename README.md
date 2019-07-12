@@ -7,7 +7,7 @@ Digital service mock to claim public money in the event property subsides into m
 |Name|Description|Required|Default|Valid|Notes|
 |---|---|:---:|---|---|---|
 |NODE_ENV|Node environment|no|development|development,test,production||
-|PORT|Port number|no|3001|||
+|PORT|Port number|no|3002|||
 |POSTGRES_USERNAME|Postgres username|yes||||
 |POSTGRES_PASSWORD|Postgres password|yes||||
 
