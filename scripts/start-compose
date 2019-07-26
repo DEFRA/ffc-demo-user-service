@@ -1,0 +1,5 @@
+#!/bin/sh
+docker-compose down -v
+docker-compose build --no-cache mine-support-user-service
+docker-compose up --force-recreate mine-support-user-service
+

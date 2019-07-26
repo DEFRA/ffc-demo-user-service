@@ -7,6 +7,7 @@ module.exports = {
       console.log('existing user, no action required')
       return existingUser
     }
+    console.log('creating new user')
     return userRepository.create(user)
   }
 }

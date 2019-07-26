@@ -1,20 +1,15 @@
+const dbConfig = {
+  username: process.env.POSTGRES_USERNAME,
+  password: process.env.POSTGRES_PASSWORD,
+  database: process.env.POSTGRES_DATABASE || 'mine_users',
+  host: process.env.POSTGRES_HOST || 'mine-support-postgres-users',
+  port: 5432,
+  dialect: 'postgres'
+}
 const config = {
-  production: {
-    username: process.env.POSTGRES_USERNAME,
-    password: process.env.POSTGRES_PASSWORD,
-    database: 'mine_users',
-    host: 'mine-support-postgres-users',
-    port: 5432,
-    dialect: 'postgres'
-  },
-  development: {
-    username: process.env.POSTGRES_USERNAME,
-    password: process.env.POSTGRES_PASSWORD,
-    database: 'mine_users',
-    host: 'mine-support-postgres-users',
-    port: 5432,
-    dialect: 'postgres'
-  }
+  production: dbConfig,
+  development: dbConfig,
+  test: dbConfig
 }
 
 module.exports = config

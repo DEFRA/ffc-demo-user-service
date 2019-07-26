@@ -31,7 +31,7 @@ spec:
         ports:
         - containerPort: {{ .Values.containers.service.port }}
         command: ["/bin/sh","-c"]
-        args: ["sequelize db:migrate; node index"]
+        args: [" node index"]
         resources:
           requests:
             memory: {{ .Values.containers.service.requestMemory | quote }}

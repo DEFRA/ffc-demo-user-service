@@ -1,0 +1,5 @@
+version: '3.4'
+services:
+  mine-support-user-service:
+    build: .
+    command: ./wait-for mine-support-postgres-users:5432 -- ./migrate-test

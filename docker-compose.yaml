@@ -1,7 +1,10 @@
-version: '3'
+version: '3.4'
 services:
   mine-support-user-service:
     build: .
+    command: ./wait-for mine-support-postgres-users:5432 -- ./migrate-start
+    depends_on:
+      - mine-support-postgres-users
     image: mine-support-user-service
     container_name: mine-support-user-service
     environment:
@@ -12,6 +15,9 @@ services:
       - mine-support-users
     ports:
       - "3002:3002"
+    volumes:
+      - node_modules:/usr/src/app/node_modules
+      - .:/usr/src/app
 
   mine-support-postgres-users:
     container_name: mine-support-postgres-users
@@ -27,3 +33,6 @@ networks:
   mine-support:
     external: true
   mine-support-users: {}
+
+volumes:
+  node_modules:
