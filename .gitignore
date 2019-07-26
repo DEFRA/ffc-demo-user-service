@@ -62,3 +62,6 @@ typings/
 
 # test output
 test-output
+
+#VS Code files
+.vscode

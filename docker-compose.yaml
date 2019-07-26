@@ -3,10 +3,10 @@ services:
   mine-support-user-service:
     build: .
     command: ./wait-for mine-support-postgres-users:5432 -- ./migrate-start
-    depends_on:
-      - mine-support-postgres-users
     image: mine-support-user-service
     container_name: mine-support-user-service
+    depends_on:
+      - mine-support-postgres-users
     environment:
       POSTGRES_PASSWORD: ppp
       POSTGRES_USERNAME: postgres
