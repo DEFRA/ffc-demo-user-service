@@ -1,28 +1,29 @@
 environment: development
+name: mine-support-user-service
+image: mine-support-user-service
 postgresUsername: postgres@mine-support2
 postgresPassword: changeme
-containers:
-  service:
-    name: mine-support-user-service
-    port: 3002
-    registry:
-    image: mine-support-user-service
-    tag: latest
-    imagePullPolicy: IfNotPresent
-    requestMemory: 30Mi
-    requestCpu: 10m
-    limitMemory: 60Mi
-    limitCpu: 40m
-    runAsNonRoot: true
-    runAsUser: 1000
-    readOnlyRootFilesystem: true
-    allowPrivilegeEscalation: false
-    restartPolicy: Always
+restClientTimeoutMillis: 10000
+service:
+  type: ClusterIP
+  port: 80
+container:
+  imagePullPolicy: IfNotPresent
+  redeployOnChange: update this field to force a change
+  requestMemory: 30Mi
+  requestCpu: 10m
+  limitMemory: 60Mi
+  limitCpu: 40m
+  runAsNonRoot: true
+  runAsUser: 1000
+  readOnlyRootFilesystem: true
+  allowPrivilegeEscalation: false
+  restartPolicy: Always
 database:
   name: mine-support-postgres-users
-  externalName: host.docker.internal
+  externalName: mine-support2.postgres.database.azure.com
   port: 5432
-replicas: 1
+replicaCount: 1
 minReadySeconds: 10
 maxSurge: 1
 maxUnavailable: 1
