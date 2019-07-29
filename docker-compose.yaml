@@ -10,9 +10,9 @@ services:
     environment:
       POSTGRES_PASSWORD: ppp
       POSTGRES_USERNAME: postgres
-    networks:
-      - mine-support
-      - mine-support-users
+#    networks:
+#      - mine-support
+#      - mine-support-users
     ports:
       - "3002:3002"
     volumes:
@@ -26,13 +26,13 @@ services:
       POSTGRES_DB: mine_users
       POSTGRES_PASSWORD: ppp
       POSTGRES_USERNAME: postgres
-    networks:
-      - mine-support-users
+#    networks:
+#      - mine-support-users
 
-networks:
-  mine-support:
-    external: true
-  mine-support-users: {}
+#networks:
+#  mine-support:
+#    external: true
+#  mine-support-users: {}
 
 volumes:
   node_modules:
