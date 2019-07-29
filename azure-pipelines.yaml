@@ -57,8 +57,6 @@ steps:
     mkdir test-output
     chmod 777 test-output
     ls -l ./wait-for
-    chmod 666 ./wait-for
-    ls -l ./wait-for
   displayName: create test output directory
   # build test image
 - task: DockerCompose@0
