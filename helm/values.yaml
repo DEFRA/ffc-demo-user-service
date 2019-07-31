@@ -3,7 +3,6 @@ name: mine-support-user-service
 image: mine-support-user-service
 postgresUsername: postgres@mine-support2
 postgresPassword: changeme
-restClientTimeoutMillis: 10000
 service:
   type: ClusterIP
   port: 80
@@ -19,9 +18,11 @@ container:
   readOnlyRootFilesystem: true
   allowPrivilegeEscalation: false
   restartPolicy: Always
+  command: ["/bin/sh","-c"]
+  args: ["sequelize db:migrate; node index"]
 database:
   name: mine-support-postgres-users
-  externalName: mine-support2.postgres.database.azure.com
+  externalName: host.docker.internal
   port: 5432
 replicaCount: 1
 minReadySeconds: 10
