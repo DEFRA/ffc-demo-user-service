@@ -10,6 +10,8 @@ Digital service mock to claim public money in the event property subsides into m
 |PORT|Port number|no|3002|||
 |POSTGRES_USERNAME|Postgres username|yes||||
 |POSTGRES_PASSWORD|Postgres password|yes||||
+|POSTGRES_DATABASE|Postgres database|no|mine_users|||
+|POSTGRES_HOST|Postgres host|no|mine-support-postgres-users|||
 
 # Prerequisites
 Node v10+
@@ -35,9 +37,11 @@ First build the container so it is available in the local Docker registry
 
  `./scripts/deploy-local`
 
+ A local Postgres database will need to be installed and setup with the username and password defined in the [values.yaml](./helm/values.yaml) for the service to operate.
+
 It is much quicker to use the provided [docker-compose.yaml](./docker-compose.yaml) file for development. Along with the user service the compose file contains a Postgres image and makes use of the [migrate-start](./migrate-start) script to ensure the database migrations are run during startup.
 
-The [migrate-start](./migrate-start) script uses [wait-for](./wait-for) to ensure migrations are run after the Postgres database is accepting connections. Further details on `wait-for` are available [here](https://github.com/gesellix/wait-for).
+The [migrate-start](./migrate-start) script uses [wait-for](./wait-for) to wait until the Postgres database is accepting connections before running the migration. Further details on `wait-for` are available [here](https://github.com/gesellix/wait-for).
 
 The docker-compose file can be launched via `./bin/start-compose`. This will start a nodemon session watching for changes in `.js` files.
 
@@ -47,7 +51,7 @@ You may need to create a directory at `/c` then mount it via `sudo mount --bind 
 
 # How to run tests
 Tests are written in Lab and are intended to be run in an container. 
-The script used by the continuous integration build may be run via the script `./scripts/test-compose`.
+The script used by the continuous integration build may be run via the script [./scripts/test-compose](./scripts/test-compose).
 
 Tests may also be run locally but require a Postgres database for integration tests, and the following environment variables setting: `POSTGRES_USERNAME`, `POSTGRES_PASSWORD`, `POSTGRES_DATABASE`, `POSTGRES_HOST`
 
@@ -55,7 +59,7 @@ Local tests can be run with the command:
 
 `npm run test`
 
-# Build Pipeline
+# Build pipeline
 
 The [azure-pipelines.yaml](azure-pipelines.yaml) performs the following tasks:
 - Runs unit tests
@@ -68,7 +72,7 @@ Builds will be deployed into a namespace with the format `mine-support-user-serv
 A detailed description on the build pipeline and PR work flow is available in the [Defra Confluence page](https://eaflood.atlassian.net/wiki/spaces/FFCPD/pages/1281359920/Build+Pipeline+and+PR+Workflow)
 
 
-# Testing Locally
+# Testing locally
 
 The mine-support-user-service is not exposed via an endpoint within Kubernetes.
 
