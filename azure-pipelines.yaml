@@ -120,7 +120,7 @@ steps:
     chartType: filepath
     chartPath: helm
     releaseName: $(imageName)-$(containerTag)
-    overrideValues: 'database.externalName=$(postgresHost),postgresPassword=$(postgresPassword)'
+    overrideValues: 'postgresExternalName=$(postgresExternalName),postgresPassword=$(postgresPassword)'
     arguments: --set image=$(azureContainerRegistryFull)/$(imageName):$(containerTag) --set container.redeployOnChange=$(Build.BuildId)
     install: true
     waitForExecution: true

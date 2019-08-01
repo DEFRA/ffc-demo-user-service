@@ -8,8 +8,11 @@ services:
     depends_on:
       - mine-support-postgres-users
     environment:
+      POSTGRES_DB: mine_users
       POSTGRES_PASSWORD: ppp
       POSTGRES_USERNAME: postgres
+      POSTGRES_HOST: mine-support-postgres-users
+      POSTGRES_PORT: 5432
 
   mine-support-postgres-users:
     container_name: mine-support-postgres-users

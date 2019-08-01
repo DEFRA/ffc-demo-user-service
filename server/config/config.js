@@ -1,9 +1,9 @@
 const dbConfig = {
   username: process.env.POSTGRES_USERNAME,
   password: process.env.POSTGRES_PASSWORD,
-  database: process.env.POSTGRES_DATABASE || 'mine_users',
-  host: process.env.POSTGRES_HOST || 'mine-support-postgres-users',
-  port: 5432,
+  database: process.env.POSTGRES_DATABASE,
+  host: process.env.POSTGRES_HOST,
+  port: process.env.POSTGRES_PORT,
   dialect: 'postgres'
 }
 const config = {

@@ -57,5 +57,11 @@ spec:
               value: {{ .Values.postgresUsername }}
             - name: POSTGRES_PASSWORD
               value: {{ .Values.postgresPassword }}
+            - name: POSTGRES_DATABASE
+              value: {{ .Values.postgresDatabase }}
+            - name: POSTGRES_HOST
+              value: {{ .Values.postgresHost }}
+            - name: POSTGRES_PORT
+              value: {{ .Values.postgresPort }}
             - name: PORT
               value: "3002"

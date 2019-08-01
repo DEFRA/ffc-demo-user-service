@@ -10,8 +10,9 @@ Digital service mock to claim public money in the event property subsides into m
 |PORT|Port number|no|3002|||
 |POSTGRES_USERNAME|Postgres username|yes||||
 |POSTGRES_PASSWORD|Postgres password|yes||||
-|POSTGRES_DATABASE|Postgres database|no|mine_users|||
-|POSTGRES_HOST|Postgres host|no|mine-support-postgres-users|||
+|POSTGRES_DATABASE|Postgres database|yes||||
+|POSTGRES_HOST|Postgres host|yes||||
+|POSTGRES_PORT|Postgres port|yes||||
 
 # Prerequisites
 Node v10+

@@ -1,13 +1,13 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: {{ .Values.database.name }}
+  name: {{ .Values.postgresHost }}
 spec:
   type: ExternalName
-  externalName: {{ .Values.database.externalName }}
+  externalName: {{ .Values.postgresExternalName }}
   ports:
     - name: port
-      port: {{ .Values.database.port }}
+      port: {{ .Values.postgresPort }}
 ---
 apiVersion: v1
 kind: Service
