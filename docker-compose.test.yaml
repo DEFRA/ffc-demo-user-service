@@ -1,7 +1,6 @@
 version: '3.4'
 services:
   mine-support-user-service:
-    build: .
     volumes:
       - ./test-output:/usr/src/app/test-output
     command: ./wait-for mine-support-postgres-users:5432 -- ./migrate-test

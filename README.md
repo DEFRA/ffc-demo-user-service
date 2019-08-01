@@ -40,18 +40,21 @@ First build the container so it is available in the local Docker registry
 
  A local Postgres database will need to be installed and setup with the username and password defined in the [values.yaml](./helm/values.yaml) for the service to operate.
 
-It is much quicker to use the provided [docker-compose.yaml](./docker-compose.yaml) file for development. Along with the user service the compose file contains a Postgres image and makes use of the [migrate-start](./migrate-start) script to ensure the database migrations are run during startup.
+It is much quicker to develop using docker compose locally than to set up a local environment.
+The [./bin/start-compose](./bin/start-compose) script will run the migrations then start a nodemon session watching for changes in `.js` files.
 
-The [migrate-start](./migrate-start) script uses [wait-for](./wait-for) to wait until the Postgres database is accepting connections before running the migration. Further details on `wait-for` are available [here](https://github.com/gesellix/wait-for).
+The `start-compose` scripts uses two override files, [docker-compose.migrate.yaml](docker-compose.migrate.yaml) runs the migration, and [docker-compose.local.yaml](docker-compose.local.yaml) starts the service, mounting folders and setting up networking. Attempting to do this in a single script prevented the port mappings working.
 
-The docker-compose file can be launched via `./bin/start-compose`. This will start a nodemon session watching for changes in `.js` files.
+The script [wait-for](./wait-for) is used to ensure the Postgres database is accepting connections before running the migration. Further details on `wait-for` are available [here](https://github.com/gesellix/wait-for).
 
 For the volume mounts to work correct via WSL the application needs to be run from `/c/...` rather than `/mnt/c/..`.
 
 You may need to create a directory at `/c` then mount it via `sudo mount --bind /mnt/c /c` to be able to change to `/c/..`
 
+Alternatively automounting may be set up. Further details available [here](https://nickjanetakis.com/blog/setting-up-docker-for-windows-and-wsl-to-work-flawlessly).
+
 # How to run tests
-Tests are written in Lab and are intended to be run in an container. 
+Tests are written in Lab and are intended to be run in an container.
 The script used by the continuous integration build may be run via the script [./scripts/test-compose](./scripts/test-compose).
 
 Tests may also be run locally but require a Postgres database for integration tests, and the following environment variables setting: `POSTGRES_USERNAME`, `POSTGRES_PASSWORD`, `POSTGRES_DATABASE`, `POSTGRES_HOST`

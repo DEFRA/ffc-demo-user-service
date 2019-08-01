@@ -9,7 +9,7 @@ spec:
     type: RollingUpdate
     rollingUpdate:
       maxSurge: {{ .Values.maxSurge }}
-      maxUnavailable: {{ .Values.maxUnavailable }}  
+      maxUnavailable: {{ .Values.maxUnavailable }}
   template:
     metadata:
       labels:
