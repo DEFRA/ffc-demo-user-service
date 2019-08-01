@@ -62,6 +62,6 @@ spec:
             - name: POSTGRES_HOST
               value: {{ .Values.postgresHost }}
             - name: POSTGRES_PORT
-              value: {{ .Values.postgresPort }}
+              value: {{ .Values.postgresPort | quote }}
             - name: PORT
               value: "3002"
