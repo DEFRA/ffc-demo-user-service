@@ -10,7 +10,7 @@ Digital service mock to claim public money in the event property subsides into m
 |PORT|Port number|no|3002|||
 |POSTGRES_USERNAME|Postgres username|yes||||
 |POSTGRES_PASSWORD|Postgres password|yes||||
-|POSTGRES_DATABASE|Postgres database|yes||||
+|POSTGRES_DB|Postgres database|yes||||
 |POSTGRES_HOST|Postgres host|yes||||
 |POSTGRES_PORT|Postgres port|yes||||
 
@@ -57,7 +57,7 @@ Alternatively automounting may be set up. Further details available [here](https
 Tests are written in Lab and are intended to be run in an container.
 The script used by the continuous integration build may be run via the script [./scripts/test-compose](./scripts/test-compose).
 
-Tests may also be run locally but require a Postgres database for integration tests, and the following environment variables setting: `POSTGRES_USERNAME`, `POSTGRES_PASSWORD`, `POSTGRES_DATABASE`, `POSTGRES_HOST`
+Tests may also be run locally but require a Postgres database for integration tests, and the following environment variables setting: `POSTGRES_USERNAME`, `POSTGRES_PASSWORD`, `POSTGRES_DB`, `POSTGRES_HOST`
 
 Local tests can be run with the command:
 
