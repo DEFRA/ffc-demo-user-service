@@ -18,16 +18,9 @@ Digital service mock to claim public money in the event property subsides into m
 Node v10+
 PostgreSQL
 
-# Running the application
-The application is designed to run as a container via Docker Compose or Kubernetes (with Helm).
-
-A convenience script is provided to run via Docker Compose:
-
-`scripts/start`
-
-This will create the required `mine-support` network before starting the service so that it can communicate with other Mine Support services running alongside it through docker-compose. The script will then attach to the running service, tailing its logs and allowing the service to be brought down by pressing `Ctrl + C`.
 # Running the application in containers
-The service has been developed with the intention of running in Kubernetes. A helm chart is included in the `.\helm` folder.
+The application is designed to run as a container via Docker Compose or Kubernetes (with Helm). A helm chart is included in the `.\helm` folder.
+
 A utility script is provided to aid in deploying to a local cluster.
 
 First build the container so it is available in the local Docker registry
@@ -41,9 +34,11 @@ First build the container so it is available in the local Docker registry
  A local Postgres database will need to be installed and setup with the username and password defined in the [values.yaml](./helm/values.yaml) for the service to operate.
 
 It is much quicker to develop using docker compose locally than to set up a local environment.
-The [./bin/start-compose](./bin/start-compose) script will run the migrations then start a nodemon session watching for changes in `.js` files.
+The [./scripts/start](./scripts/start) script will run the migrations, start a nodemon session watching for changes in `.js` files, and attach to the running service. Logs will be tailed and the service may be brought down by pressing `Ctrl + C`.
 
-The `start-compose` scripts uses two override files, [docker-compose.migrate.yaml](docker-compose.migrate.yaml) runs the migration, and [docker-compose.local.yaml](docker-compose.local.yaml) starts the service, mounting folders and setting up networking. Attempting to do this in a single script prevented the port mappings working.
+The start script will also create the required `mine-support` network so that it can communicate with other Mine Support services running alongside it through docker-compose.
+
+The `start` scripts uses two override files, [docker-compose.migrate.yaml](docker-compose.migrate.yaml) runs the migration, and [docker-compose.local.yaml](docker-compose.local.yaml) starts the service, mounting folders and setting up networking. Attempting to do this in a single script prevented the port mappings working.
 
 The script [wait-for](./wait-for) is used to ensure the Postgres database is accepting connections before running the migration. Further details on `wait-for` are available [here](https://github.com/gesellix/wait-for).
 
@@ -55,7 +50,7 @@ Alternatively automounting may be set up. Further details available [here](https
 
 # How to run tests
 Tests are written in Lab and are intended to be run in an container.
-The script used by the continuous integration build may be run via the script [./scripts/test-compose](./scripts/test-compose).
+The script used by the continuous integration build may be run via the script [./scripts/test](./scripts/test).
 
 Tests may also be run locally but require a Postgres database for integration tests, and the following environment variables setting: `POSTGRES_USERNAME`, `POSTGRES_PASSWORD`, `POSTGRES_DB`, `POSTGRES_HOST`
 
