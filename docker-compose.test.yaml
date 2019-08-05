@@ -3,4 +3,4 @@ services:
   mine-support-user-service:
     volumes:
       - ./test-output:/usr/src/app/test-output
-    command: ./migrate-test
+    command: ./wait-for mine-support-postgres-users:5432 -- ./migrate-test

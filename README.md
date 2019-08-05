@@ -40,6 +40,8 @@ The start script will also create the required `mine-support` network so that it
 
 The `start` scripts uses two override files, [docker-compose.migrate.yaml](docker-compose.migrate.yaml) runs the migration, and [docker-compose.local.yaml](docker-compose.local.yaml) starts the service, mounting folders and setting up networking. Attempting to do this in a single script prevented the port mappings working.
 
+The script [wait-for](./wait-for) is used to ensure the Postgres database is accepting connections before running the migration. Further details on `wait-for` are available [here](https://github.com/gesellix/wait-for).
+
 For the volume mounts to work correct via WSL the application needs to be run from `/c/...` rather than `/mnt/c/..`.
 
 You may need to create a directory at `/c` then mount it via `sudo mount --bind /mnt/c /c` to be able to change to `/c/..`
