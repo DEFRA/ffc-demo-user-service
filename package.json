@@ -8,7 +8,7 @@
     "start-watch": "nodemon --inspect=0.0.0.0 --ext js --legacy-watch index.js",
     "lint": "standard",
     "pretest": "npm run lint",
-    "test": "lab -l -c -r console -o stdout -r junit -o ./test-output/junit.xml",
+    "test": "lab -c -l -r console -o stdout -r junit -o ./test-output/junit.xml",
     "migrate": "sequelize db:migrate"
   },
   "author": "",
@@ -17,10 +17,10 @@
     "@hapi/boom": "^7.4.2",
     "@hapi/hapi": "^18.3.1",
     "@hapi/joi": "^15.1.0",
-    "pg": "^7.9.0",
-    "proxyquire": "^2.1.0",
+    "pg": "^7.12.0",
+    "proxyquire": "^2.1.1",
     "sequelize": "^6.0.0",
-    "sinon": "^7.3.1"
+    "sinon": "^7.4.0"
   },
   "devDependencies": {
     "blipp": "3.1.1",
