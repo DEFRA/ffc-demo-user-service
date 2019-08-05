@@ -1,28 +1,30 @@
 environment: development
+name: mine-support-user-service
+image: mine-support-user-service
 postgresUsername: postgres@mine-support2
 postgresPassword: changeme
-containers:
-  service:
-    name: mine-support-user-service
-    port: 3002
-    registry:
-    image: mine-support-user-service
-    tag: latest
-    imagePullPolicy: IfNotPresent
-    requestMemory: 30Mi
-    requestCpu: 10m
-    limitMemory: 60Mi
-    limitCpu: 40m
-    runAsNonRoot: true
-    runAsUser: 1000
-    readOnlyRootFilesystem: true
-    allowPrivilegeEscalation: false
-    restartPolicy: Always
-database:
-  name: mine-support-postgres-users
-  externalName: host.docker.internal
-  port: 5432
-replicas: 1
+postgresDatabase: mine_users
+postgresHost: mine-support-postgres-users
+postgresExternalName: host.docker.internal
+postgresPort: 5432
+service:
+  type: ClusterIP
+  port: 80
+container:
+  imagePullPolicy: IfNotPresent
+  redeployOnChange: update this field to force a change
+  requestMemory: 30Mi
+  requestCpu: 10m
+  limitMemory: 60Mi
+  limitCpu: 40m
+  runAsNonRoot: true
+  runAsUser: 1000
+  readOnlyRootFilesystem: true
+  allowPrivilegeEscalation: false
+  restartPolicy: Always
+  command: ["/bin/sh","-c"]
+  args: ["sequelize db:migrate; node index"]
+replicaCount: 1
 minReadySeconds: 10
 maxSurge: 1
 maxUnavailable: 1
