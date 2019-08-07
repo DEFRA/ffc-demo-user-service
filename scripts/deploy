@@ -1,9 +1,9 @@
-#!/usr/bin/env sh
+#!/bin/sh
 
 set -e
 projectRoot="$(a="/$0"; a=${a%/*}; a=${a:-.}; a=${a#/}/; cd "$a/.." || return; pwd)"
 
 (
   cd "${projectRoot}"
-  docker-compose -f docker-compose.yaml -f docker-compose.test.yaml up --force-recreate
+  helm upgrade mine-support-user-service --install --namespace mine-support-user-service ./helm
 )

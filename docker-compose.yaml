@@ -4,6 +4,7 @@ services:
     build: .
     image: mine-support-user-service
     container_name: mine-support-user-service
+    command: sh -c "./wait-for mine-support-postgres-users:5432 -- npm run migrate && npm run start-watch"
     depends_on:
       - mine-support-postgres-users
     environment:
@@ -12,6 +13,14 @@ services:
       POSTGRES_USERNAME: postgres
       POSTGRES_HOST: mine-support-postgres-users
       POSTGRES_PORT: 5432
+    networks:
+      - mine-support
+      - mine-support-users
+    ports:
+      - "3002:3002"
+    volumes:
+      - node_modules:/usr/src/app/node_modules
+      - .:/usr/src/app
 
   mine-support-postgres-users:
     container_name: mine-support-postgres-users
@@ -20,3 +29,13 @@ services:
       POSTGRES_DB: mine_users
       POSTGRES_PASSWORD: ppp
       POSTGRES_USERNAME: postgres
+    networks:
+     - mine-support-users
+
+networks:
+  mine-support:
+   external: true
+  mine-support-users: {}
+
+volumes:
+  node_modules:
