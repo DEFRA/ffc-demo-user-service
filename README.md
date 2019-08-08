@@ -1,9 +1,11 @@
 [![Build Status](https://defradev.visualstudio.com/DEFRA_FutureFarming/_apis/build/status/DEFRA.mine-support-user-service?branchName=master)](https://defradev.visualstudio.com/DEFRA_FutureFarming/_build/latest?definitionId=594&branchName=master)
 
 # Mine Support User Service
+
 Digital service mock to claim public money in the event property subsides into mine shaft.  The user service receives user data and if it doesn’t already exist saves it in a Postgresql database table.
 
 # Environment variables
+
 |Name|Description|Required|Default|Valid|Notes|
 |---|---|:---:|---|---|---|
 |NODE_ENV|Node environment|no|development|development,test,production||
@@ -20,6 +22,7 @@ Digital service mock to claim public money in the event property subsides into m
 - Access to a PostgreSQL database
 
 # How to run tests
+
 A convenience script is provided to run automated tests in a containerised environment:
 
 ```
@@ -40,9 +43,11 @@ Running the tests locally requires a Postgres database for integration tests, an
 - `POSTGRES_HOST`
 
 # Running the application
+
 The application is designed to run as a container via Docker Compose or Kubernetes (with Helm).
 
 ## Using Docker Compose
+
 A set of convenience scripts are provided for local development and running via Docker Compose.
 
 ```
@@ -68,6 +73,7 @@ The script [wait-for](./wait-for) is used to ensure the Postgres database is acc
 This service depends on an external Docker network named `mine-support` to communicate with other Mine Support services running alongside it. The start script will automatically create the network if it doesn't exist and the stop script will remove the network if no other containers are using it.
 
 ### Volume mounts on Windows Subsystem for Linux
+
 For the volume mounts to work correct via WSL the application needs to be run from `/c/...` rather than `/mnt/c/..`.
 
 You may need to create a directory at `/c` then mount it via `sudo mount --bind /mnt/c /c` to be able to change to `/c/..`
@@ -75,6 +81,7 @@ You may need to create a directory at `/c` then mount it via `sudo mount --bind 
 Alternatively automounting may be set up. Further details available [here](https://nickjanetakis.com/blog/setting-up-docker-for-windows-and-wsl-to-work-flawlessly).
 
 ## Using Kubernetes
+
 The service has been developed with the intention of running on Kubernetes in production.  A helm chart is included in the `.\helm` folder.
 
 Running via Helm requires a local Postgres database to be installed and setup with the username and password defined in the [values.yaml](./helm/values.yaml). It is much simpler to develop using Docker Compose locally than to set up a local Kubernetes environment. See above for instructions.
@@ -90,6 +97,7 @@ scripts/deploy
 ```
 
 ### Accessing the pod
+
 The mine-support-user-service is not exposed via an endpoint within Kubernetes.
 
 The deployment may be accessed by forwarding a port from a pod.
