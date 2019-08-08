@@ -15,8 +15,9 @@ Digital service mock to claim public money in the event property subsides into m
 |POSTGRES_PORT|Postgres port|yes||||
 
 # Prerequisites
+
 - Node v10+
-- PostgreSQL
+- Access to a PostgreSQL database
 
 # How to run tests
 A convenience script is provided to run automated tests in a containerised environment:
