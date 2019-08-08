@@ -52,7 +52,7 @@ A set of convenience scripts are provided for local development and running via 
 
 ```
 # Build service containers
-scripts/setup
+scripts/build
 
 # Start the service and attach to running containers (press `ctrl + c` to quit)
 scripts/start
@@ -90,7 +90,7 @@ To test Helm deployments locally, a [deploy](./deploy) script is provided.
 
 ```
 # Build service containers
-scripts/setup
+scripts/build
 
 # Deploy to the current Helm context
 scripts/deploy
