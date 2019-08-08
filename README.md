@@ -71,8 +71,6 @@ scripts/build --no-cache
 scripts/start --detach
 ```
 
-The script [wait-for](./wait-for) is used to ensure the Postgres database is accepting connections before running the migration. Further details on `wait-for` are available [here](https://github.com/gesellix/wait-for).
-
 This service depends on an external Docker network named `mine-support` to communicate with other Mine Support services running alongside it. The start script will automatically create the network if it doesn't exist and the stop script will remove the network if no other containers are using it.
 
 ### Volume mounts on Windows Subsystem for Linux
