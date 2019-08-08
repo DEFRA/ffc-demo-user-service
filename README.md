@@ -153,13 +153,13 @@ spec:
       - env:
         - name: MINE_SUPPORT_USER_SERVICE
           value: http://mine-support-user-service.mine-support-user-service-pr2
-        name: mine-support-api-gateway
+        name: mine-support-user-service
 ```
 
 then apply the patch:
 
-`kubectl patch deployment --namespace default mine-support-api-gateway --patch "$(cat patch.yaml)"`
+`kubectl patch deployment --namespace default mine-support-user-service --patch "$(cat patch.yaml)"`
 
 Once tested the patch can be rolled back, i.e.
 
-`kubectl rollout undo --namespace default deployment/mine-support-api-gateway`
+`kubectl rollout undo --namespace default deployment/mine-support-user-service`
