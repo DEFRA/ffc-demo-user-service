@@ -6,15 +6,15 @@ Digital service mock to claim public money in the event property subsides into m
 
 # Environment variables
 
-|Name|Description|Required|Default|Valid|Notes|
-|---|---|:---:|---|---|---|
-|NODE_ENV|Node environment|no|development|development,test,production||
-|PORT|Port number|no|3002|||
-|POSTGRES_USERNAME|Postgres username|yes||||
-|POSTGRES_PASSWORD|Postgres password|yes||||
-|POSTGRES_DB|Postgres database|yes||||
-|POSTGRES_HOST|Postgres host|yes||||
-|POSTGRES_PORT|Postgres port|yes||||
+| Name              | Description       | Required | Default     | Valid                     | Notes |
+|-------------------|-------------------|:--------:|-------------|---------------------------|-------|
+| NODE_ENV          | Node environment  | no       | development |development,test,production|       |
+| PORT              | Port number       | no       | 3002        |                           |       |
+| POSTGRES_USERNAME | Postgres username | yes      |             |                           |       |
+| POSTGRES_PASSWORD | Postgres password | yes      |             |                           |       |
+| POSTGRES_DB       | Postgres database | yes      |             |                           |       |
+| POSTGRES_HOST     | Postgres host     | yes      |             |                           |       |
+| POSTGRES_PORT     | Postgres port     | yes      |             |                           |       |
 
 # Prerequisites
 
