@@ -4,12 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "start-watch": "nodemon --inspect=0.0.0.0 --ext js --legacy-watch index.js",
-    "lint": "standard",
-    "pretest": "npm run lint",
-    "test": "lab -c -l -r console -o stdout -r junit -o ./test-output/junit.xml",
-    "migrate": "sequelize db:migrate"
+    "migrate": "sequelize db:migrate",
+    "pretest": "npm run test:lint",
+    "test": "npm run test:unit",
+    "test:lint": "standard",
+    "test:unit": "lab -c -l -r console -o stdout -r junit -o ./test-output/junit.xml",
+    "watch:server": "nodemon --inspect=0.0.0.0 --ext js --legacy-watch index.js"
   },
   "author": "",
   "license": "ISC",
