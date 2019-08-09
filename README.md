@@ -29,6 +29,8 @@ A convenience script is provided to run automated tests in a containerised envir
 scripts/test
 ```
 
+This runs tests via a `docker-compose run` command. If tests complete successfully, all containers, networks and volumes are cleaned up before the script exits. If there is an error or any tests fail, the associated Docker resources will be left available for inspection.
+
 Alternatively, the same tests may be run locally via npm:
 
 ```
