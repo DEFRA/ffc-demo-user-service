@@ -1,6 +1,0 @@
-version: '3.4'
-services:
-  mine-support-user-service:
-    volumes:
-      - ./test-output:/usr/src/app/test-output
-    command: sh -c "./wait-for mine-support-postgres-users:5432 -- npm run migrate && npm run test"

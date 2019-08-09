@@ -73,13 +73,11 @@ scripts/start --detach
 
 This service depends on an external Docker network named `mine-support` to communicate with other Mine Support services running alongside it. The start script will automatically create the network if it doesn't exist and the stop script will remove the network if no other containers are using it.
 
+The external network is declared in a secondary Docker Compose configuration (referenced by the above scripts) so that this service can be run in isolation without creating an external Docker network.
+
 ### Volume mounts on Windows Subsystem for Linux
 
-For the volume mounts to work correct via WSL the application needs to be run from `/c/...` rather than `/mnt/c/..`.
-
-You may need to create a directory at `/c` then mount it via `sudo mount --bind /mnt/c /c` to be able to change to `/c/..`
-
-Alternatively automounting may be set up. Further details available [here](https://nickjanetakis.com/blog/setting-up-docker-for-windows-and-wsl-to-work-flawlessly).
+For the volume mounts to work correct via WSL it is necessary to either set up automounting of `/mnt/c`, or change the mount point for the shared drive from `/mnt/c` to `/c`. For a well-explained write-up, see [this blog post](https://nickjanetakis.com/blog/setting-up-docker-for-windows-and-wsl-to-work-flawlessly) by Nick Janetakis.
 
 ## Using Kubernetes
 
