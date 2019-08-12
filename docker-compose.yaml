@@ -18,8 +18,8 @@ services:
     ports:
       - "3002:3002"
     volumes:
-      - node_modules:/usr/src/app/node_modules
-      - .:/usr/src/app
+      - node_modules:/home/node/node_modules
+      - .:/home/node
 
   mine-support-postgres-users:
     container_name: mine-support-postgres-users
