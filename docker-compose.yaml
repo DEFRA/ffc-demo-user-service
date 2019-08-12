@@ -29,7 +29,7 @@ services:
       POSTGRES_PASSWORD: ppp
       POSTGRES_USERNAME: postgres
     networks:
-     - mine-support-users
+      - mine-support-users
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
