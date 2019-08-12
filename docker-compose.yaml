@@ -31,11 +31,11 @@ services:
     networks:
      - mine-support-users
     volumes:
-      - redis_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
 
 networks:
   mine-support-users: {}
 
 volumes:
   node_modules:
-  redis_data:
+  postgres_data:
