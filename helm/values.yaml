@@ -4,7 +4,7 @@ image: mine-support-user-service
 postgresUsername: postgres@mine-support2
 postgresPassword: changeme
 postgresDatabase: mine_users
-postgresHost: mine-support-postgres-users
+postgresHost: mine-support-user-postgres
 postgresExternalName: host.docker.internal
 postgresPort: 5432
 service:
