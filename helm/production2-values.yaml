@@ -1,4 +1,0 @@
-environment: production
-image: jwminesupport.azurecr.io/mine-support-user-service
-container:
-  imagePullPolicy: Always
