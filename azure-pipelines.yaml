@@ -79,7 +79,7 @@ steps:
     additionalDockerComposeFiles: docker-compose.test.yaml
     projectName: $(Build.Repository.Name)
     qualifyImageNames: true
-    dockerComposeCommand: run $(imageName) sh -c "npx wait-on -v tcp:mine-support-user-postgres:5432 && npm run migrate && npm run test"
+    dockerComposeCommand: run $(imageName)
   displayName: run tests
   # build base image
 - task: DockerCompose@0
