@@ -7,4 +7,4 @@ services:
   mine-support-user-service:
     command: sh -c "npx wait-on -v tcp:mine-support-user-postgres:5432 && npm run migrate && npm run test"
     volumes:
-      - ./test-output:/home/node/test-output
+      - ./test-output:/usr/src/app/test-output
