@@ -4,7 +4,7 @@ services:
     build: .
     image: mine-support-user-service
     container_name: mine-support-user-service
-    command: sh -c "npx wait-on -v tcp:mine-support-user-postgres:5432 && npm run migrate && npm run watch:server"
+    command: sh -c "npx wait-on -v tcp:mine-support-user-postgres:5432 && npm run migrate && npm run start:watch"
     depends_on:
       - mine-support-user-postgres
     environment:
