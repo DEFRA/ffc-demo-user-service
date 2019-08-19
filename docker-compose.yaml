@@ -4,19 +4,32 @@ services:
     build: .
     image: mine-support-user-service
     container_name: mine-support-user-service
+    command: sh -c "npx wait-on -v tcp:mine-support-user-postgres:5432 && npm run migrate && npm run start:watch"
     depends_on:
-      - mine-support-postgres-users
+      - mine-support-user-postgres
     environment:
       POSTGRES_DB: mine_users
       POSTGRES_PASSWORD: ppp
       POSTGRES_USERNAME: postgres
-      POSTGRES_HOST: mine-support-postgres-users
+      POSTGRES_HOST: mine-support-user-postgres
       POSTGRES_PORT: 5432
+    networks:
+      - mine-support-users
 
-  mine-support-postgres-users:
-    container_name: mine-support-postgres-users
+  mine-support-user-postgres:
+    container_name: mine-support-user-postgres
     image: postgres:11.4-alpine
     environment:
       POSTGRES_DB: mine_users
       POSTGRES_PASSWORD: ppp
       POSTGRES_USERNAME: postgres
+    networks:
+      - mine-support-users
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+networks:
+  mine-support-users: {}
+
+volumes:
+  postgres_data:

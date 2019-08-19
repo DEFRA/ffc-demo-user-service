@@ -6,6 +6,7 @@ const dbConfig = {
   port: process.env.POSTGRES_PORT,
   dialect: 'postgres'
 }
+
 const config = {
   production: dbConfig,
   development: dbConfig,

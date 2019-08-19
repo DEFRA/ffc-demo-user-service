@@ -1,6 +1,10 @@
 version: '3.4'
+
+# This override file should be used when running automated tests so
+# that test output is saved to the host
+
 services:
   mine-support-user-service:
+    command: sh -c "npx wait-on -v tcp:mine-support-user-postgres:5432 && npm run migrate && npm run test"
     volumes:
       - ./test-output:/usr/src/app/test-output
-    command: ./wait-for mine-support-postgres-users:5432 -- ./migrate-test

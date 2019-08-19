@@ -1,2 +1,0 @@
-#!/bin/sh
-helm upgrade mine-support-user-service --install --namespace mine-support-user-service ./helm
