@@ -23,7 +23,7 @@ container:
   allowPrivilegeEscalation: false
   restartPolicy: Always
   command: ["/bin/sh","-c"]
-  args: ["sequelize db:migrate; node index"]
+  args: ["npm run migrate; node index"]
 replicaCount: 1
 minReadySeconds: 10
 maxSurge: 1
