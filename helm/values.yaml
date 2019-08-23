@@ -24,7 +24,7 @@ container:
   allowPrivilegeEscalation: false
   restartPolicy: Always
   command: ["/bin/sh", "-c"]
-  args: ["scripts/wait-for/wait-for mine-support-user-postgres-postgresql:5432 -- npm --no-update-notifier run migrate && node index"]
+  args: ["scripts/wait-for/wait-for $(POSTGRES_HOST):5432 -- npm --no-update-notifier run migrate && node index"]
 replicaCount: 1
 minReadySeconds: 10
 maxSurge: 1
