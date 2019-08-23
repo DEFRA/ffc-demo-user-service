@@ -8,6 +8,7 @@ projectRoot="$(a="/$0"; a=${a%/*}; a=${a:-.}; a=${a#/}/; cd "$a/../.." || return
 
   echo "Deploying user PostgreSQL"
   helm upgrade \
+    --atomic \
     --install \
     --namespace mine-support-user-service \
     --set persistence.enabled=false \
@@ -21,6 +22,7 @@ projectRoot="$(a="/$0"; a=${a%/*}; a=${a:-.}; a=${a#/}/; cd "$a/../.." || return
 
   echo "Deploying user service"
   helm upgrade \
+    --atomic \
     --install \
     --namespace mine-support-user-service \
     --wait \
