@@ -1,7 +1,7 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: {{ .Values.postgresExternalServiceName }}
+  name: {{ .Values.postgresServiceName }}
 spec:
   type: ExternalName
   externalName: {{ .Values.postgresExternalName }}

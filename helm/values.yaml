@@ -4,9 +4,9 @@ image: mine-support-user-service
 postgresUsername: postgres@mine-support2
 postgresPassword: changeme
 postgresDatabase: mine_users
-postgresHost: mine-support-user-postgres-postgresql
+postgresHost: mine-support-user-postgres
+postgresServiceName: mine-support-user-postgres
 postgresExternalName: host.docker.internal
-postgresExternalServiceName: mine-support-user-postgres
 postgresPort: 5432
 service:
   type: ClusterIP

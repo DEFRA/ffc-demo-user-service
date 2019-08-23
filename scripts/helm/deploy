@@ -25,6 +25,8 @@ projectRoot="$(a="/$0"; a=${a%/*}; a=${a:-.}; a=${a#/}/; cd "$a/../.." || return
     --atomic \
     --install \
     --namespace mine-support-user-service \
+    --set postgresHost=mine-support-user-postgres-postgresql \
+    --set postgresServiceName=mine-support-user-postgres \
     --wait \
     mine-support-user-service \
     ./helm
