@@ -4,8 +4,9 @@ image: mine-support-user-service
 postgresUsername: postgres@mine-support2
 postgresPassword: changeme
 postgresDatabase: mine_users
-postgresHost: mine-support-user-postgres
+postgresHost: mine-support-user-postgres-postgresql
 postgresExternalName: host.docker.internal
+postgresExternalServiceName: mine-support-user-postgres
 postgresPort: 5432
 service:
   type: ClusterIP
@@ -22,8 +23,8 @@ container:
   readOnlyRootFilesystem: true
   allowPrivilegeEscalation: false
   restartPolicy: Always
-  command: ["/bin/sh","-c"]
-  args: ["npm run migrate; node index"]
+  command: ["/bin/sh", "-c"]
+  args: ["scripts/wait-for/wait-for mine-support-user-postgres-postgresql:5432 -- npm run migrate && node index"]
 replicaCount: 1
 minReadySeconds: 10
 maxSurge: 1
