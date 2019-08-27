@@ -91,18 +91,14 @@ For the volume mounts to work correct via WSL it is necessary to either set up a
 
 ## Using Kubernetes
 
-The service has been developed with the intention of running on Kubernetes in production.  A helm chart is included in the `.\helm` folder.
-
-Running via Helm requires a local Postgres database to be installed and setup with the username and password defined in the [values.yaml](./helm/values.yaml). It is much simpler to develop using Docker Compose locally than to set up a local Kubernetes environment. See above for instructions.
-
-To test Helm deployments locally, a [deploy](./deploy) script is provided.
+The service has been developed with the intention of running on Kubernetes in production.  A helm chart is included in the `./helm` folder, which may be tested against a local Kubernetes cluster using the provided [Helm install](./scripts/helm/install) script. This will install the required PostgreSQL instance with persistence disabled to facilitate local deployment testing.
 
 ```
 # Build service containers
 scripts/build
 
 # Deploy to the current Helm context
-scripts/deploy
+scripts/helm/install
 ```
 
 ### Accessing the pod

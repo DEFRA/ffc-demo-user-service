@@ -5,6 +5,7 @@ postgresUsername: postgres@mine-support2
 postgresPassword: changeme
 postgresDatabase: mine_users
 postgresHost: mine-support-user-postgres
+postgresServiceName: mine-support-user-postgres
 postgresExternalName: host.docker.internal
 postgresPort: 5432
 service:
@@ -22,8 +23,8 @@ container:
   readOnlyRootFilesystem: true
   allowPrivilegeEscalation: false
   restartPolicy: Always
-  command: ["/bin/sh","-c"]
-  args: ["sequelize db:migrate; node index"]
+  command: ["/bin/sh", "-c"]
+  args: ["scripts/wait-for/wait-for $(POSTGRES_HOST):5432 -- npm --no-update-notifier run migrate && node index"]
 replicaCount: 1
 minReadySeconds: 10
 maxSurge: 1
