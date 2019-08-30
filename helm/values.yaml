@@ -25,7 +25,7 @@ container:
   allowPrivilegeEscalation: false
   restartPolicy: Always
   command: ["/bin/sh", "-c"]
-  args: [npm --no-update-notifier run migrate; node index"]
+  args: ["npm --no-update-notifier run migrate; node index"]
 replicaCount: 1
 minReadySeconds: 10
 maxSurge: 1
@@ -39,6 +39,6 @@ readinessProbe:
 livenessProbe:
   path: /healthz
   port: 3002
-  initialDelaySeconds: 30
+  initialDelaySeconds: 20
   periodSeconds: 20
   failureThreshold: 3
