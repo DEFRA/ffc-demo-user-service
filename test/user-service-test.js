@@ -1,7 +1,7 @@
 const Lab = require('lab')
 const Code = require('code')
-const db = require('../../server/models')
-const userService = require('../../server/services/user-service')
+const db = require('../server/models')
+const userService = require('../server/services/user-service')
 const lab = exports.lab = Lab.script()
 
 const testEmail = { email: 'test@email.com' }
