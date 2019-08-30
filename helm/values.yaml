@@ -1,6 +1,7 @@
 environment: development
 name: mine-support-user-service
 image: mine-support-user-service
+imagePullSecret:
 postgresUsername: postgres@mine-support2
 postgresPassword: changeme
 postgresDatabase: mine_users
