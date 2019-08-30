@@ -9,7 +9,6 @@ postgresHost: mine-support-user-postgres
 postgresServiceName: mine-support-user-postgres
 postgresExternalName: host.docker.internal
 postgresPort: 5432
-imagePullSecret:
 service:
   type: ClusterIP
   port: 80
