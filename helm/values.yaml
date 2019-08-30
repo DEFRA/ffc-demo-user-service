@@ -1,6 +1,7 @@
 environment: development
 name: mine-support-user-service
 image: mine-support-user-service
+imagePullSecret:
 postgresUsername: postgres@mine-support2
 postgresPassword: changeme
 postgresDatabase: mine_users
@@ -8,6 +9,7 @@ postgresHost: mine-support-user-postgres
 postgresServiceName: mine-support-user-postgres
 postgresExternalName: host.docker.internal
 postgresPort: 5432
+imagePullSecret:
 service:
   type: ClusterIP
   port: 80
