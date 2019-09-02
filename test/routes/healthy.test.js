@@ -14,7 +14,7 @@ describe('Healthy test', () => {
     await server.initialize()
   })
 
-  test('GET /healthy route returns 200 when connected', async () => {
+  test('GET /healthy route returns 200 when database connected', async () => {
     const options = {
       method: 'GET',
       url: '/healthy'
@@ -26,7 +26,7 @@ describe('Healthy test', () => {
     expect(response.statusCode).toBe(200)
   })
 
-  test('GET /healthy route returns 500 when not connected', async () => {
+  test('GET /healthy route returns 500 when not database connected', async () => {
     const options = {
       method: 'GET',
       url: '/healthy'
