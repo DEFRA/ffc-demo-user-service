@@ -34,11 +34,11 @@ readinessProbe:
   path: /healthy
   port: 3002
   initialDelaySeconds: 30
-  periodSeconds: 20
+  periodSeconds: 10
   failureThreshold: 3
 livenessProbe:
   path: /healthz
   port: 3002
   initialDelaySeconds: 20
-  periodSeconds: 20
+  periodSeconds: 10
   failureThreshold: 3
