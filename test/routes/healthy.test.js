@@ -1,12 +1,12 @@
 describe('Healthy test', () => {
   let createServer
   let server
-  let db
+  let dbService
 
   beforeAll(async () => {
-    jest.mock('../../server/models')
-    db = require('../../server/models')
     createServer = require('../../server')
+    jest.mock('../../server/services/database-service')
+    dbService = require('../../server/services/database-service')
   })
 
   beforeEach(async () => {
@@ -19,7 +19,8 @@ describe('Healthy test', () => {
       method: 'GET',
       url: '/healthy'
     }
-    db._connected(true)
+
+    dbService.isConnected = jest.fn(() => true)
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(200)
@@ -30,7 +31,8 @@ describe('Healthy test', () => {
       method: 'GET',
       url: '/healthy'
     }
-    db._connected(false)
+
+    dbService.isConnected = jest.fn(() => false)
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(500)
@@ -41,6 +43,6 @@ describe('Healthy test', () => {
   })
 
   afterAll(async () => {
-    jest.unmock('../../server/models')
+    jest.unmock('../../server/services/database-service')
   })
 })
