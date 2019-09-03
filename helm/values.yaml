@@ -25,8 +25,20 @@ container:
   allowPrivilegeEscalation: false
   restartPolicy: Always
   command: ["/bin/sh", "-c"]
-  args: ["scripts/wait-for/wait-for $(POSTGRES_HOST):5432 -- npm --no-update-notifier run migrate && node index"]
+  args: ["npm --no-update-notifier run migrate; node index"]
 replicaCount: 1
 minReadySeconds: 10
 maxSurge: 1
 maxUnavailable: 1
+readinessProbe:
+  path: /healthy
+  port: 3002
+  initialDelaySeconds: 40
+  periodSeconds: 10
+  failureThreshold: 3
+livenessProbe:
+  path: /healthz
+  port: 3002
+  initialDelaySeconds: 40
+  periodSeconds: 10
+  failureThreshold: 3

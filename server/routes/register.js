@@ -7,8 +7,8 @@ module.exports = {
   options: {
     validate: { payload: schema,
       failAction: async (request, h, error) => {
-        console.log(`rejected payload ${request.payload}`)
-        return h.response().code(400)
+        console.log('rejected payload', request.payload)
+        return h.response().code(400).takeover()
       }
     },
     handler: async (request, h) => {
