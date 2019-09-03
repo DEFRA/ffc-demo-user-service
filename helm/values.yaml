@@ -33,7 +33,7 @@ maxUnavailable: 1
 readinessProbe:
   path: /healthy
   port: 3002
-  initialDelaySeconds: 30
+  initialDelaySeconds: 40
   periodSeconds: 10
   failureThreshold: 3
 livenessProbe:
