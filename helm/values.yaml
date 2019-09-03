@@ -39,6 +39,6 @@ readinessProbe:
 livenessProbe:
   path: /healthz
   port: 3002
-  initialDelaySeconds: 20
+  initialDelaySeconds: 40
   periodSeconds: 10
   failureThreshold: 3
