@@ -1,5 +1,6 @@
 const hapi = require('@hapi/hapi')
 const config = require('./config')
+const dbVersion = require('./dbversion')
 
 async function createServer () {
   // Create the hapi server
@@ -13,6 +14,8 @@ async function createServer () {
       }
     }
   })
+
+  await dbVersion.throwAnyErrors()
 
   // Register the plugins
   await server.register(require('./plugins/router'))

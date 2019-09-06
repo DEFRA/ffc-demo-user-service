@@ -25,7 +25,7 @@ container:
   allowPrivilegeEscalation: false
   restartPolicy: Always
   command: ["/bin/sh", "-c"]
-  args: ["npm --no-update-notifier run migrate; node index"]
+  args: ["node index"]
 replicaCount: 1
 minReadySeconds: 10
 maxSurge: 1

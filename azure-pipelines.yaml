@@ -19,6 +19,7 @@ variables:
     imageName: ffc-demo-user-service
     containerTag: $(Build.SourceBranchName)
     safeContainerTag: $(Build.SourceBranchName)
+    containerMigrateTag: $(Build.SourceBranchName)
     mergedPrNo:
 steps:
   # extracts PR number from refs/pull/{prNo}/ branch name and sets to containerTag if pull request
@@ -45,6 +46,11 @@ steps:
     safeContainerTag=`echo $(containerTag) | sed 's/[^a-zA-Z0-9]/-/g' | tr '[:upper:]' '[:lower:]'`
     echo '##vso[task.setvariable variable=safeContainerTag]'$safeContainerTag
   displayName: set safe container tag as lower case container tag with illegal characters removed
+  # create migration container tag
+- script: |
+    containerMigrateTag=`echo $(containerTag)-migrate`
+    echo '##vso[task.setvariable variable=containerMigrateTag]'$containerMigrateTag
+  displayName: set migration container tag
   # extracts merged PR number from git log if a PR merge to master
 - script: |
     gitLog=`git log --pretty=oneline --abbrev-commit -1`
@@ -102,6 +108,42 @@ steps:
     dockerComposeFile: docker-compose.yaml
     qualifyImageNames: true
     additionalImageTags: $(containerTag)
+  displayName: Push container to registry
+  # build migration image
+- task: DockerCompose@0
+  inputs:
+    action: Build services
+    containerregistrytype: Azure Container Registry
+    azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+    azureContainerRegistry: $(azureContainerRegistryFull)
+    dockerComposeFile: docker-compose.yaml
+    additionalDockerComposeFiles: docker-compose.migrate.yaml
+    projectName: $(Build.Repository.Name)
+    qualifyImageNames: true
+    additionalImageTags: $(containerMigrateTag)
+  displayName: build migration image
+  # run migration for PR images
+- task: DockerCompose@0
+  condition: and(succeeded(), eq(variables['mergedPrNo'], ''))
+  inputs:
+    containerregistrytype: Azure Container Registry
+    azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+    azureContainerRegistry: $(azureContainerRegistryFull)
+    dockerComposeFile: docker-compose.yaml
+    additionalDockerComposeFiles: docker-compose.migrate.yaml
+    projectName: $(Build.Repository.Name)
+    qualifyImageNames: true
+    dockerComposeCommand: run $(imageName)
+  displayName: run migration for PR images
+  # push container to registry
+- task: DockerCompose@0
+  inputs:
+    action: Push services
+    azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+    azureContainerRegistry: $(azureContainerRegistryFull)
+    dockerComposeFile: docker-compose.yaml
+    qualifyImageNames: true
+    additionalImageTags: $(containerMigrateTag)
   displayName: Push container to registry
   # publish test results
 - task: PublishTestResults@2
@@ -191,7 +233,7 @@ steps:
     command: package
     chartPath: ./helm
     save: false
-  # copy yaml values for release  
+  # copy yaml values for release
 - task: CopyFiles@2
   displayName: 'Copy values files'
   inputs:
