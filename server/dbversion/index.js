@@ -36,7 +36,6 @@ class DbVersion {
     if (result.length > 0) {
       this.currentDatabaseVersion = result[0]
     }
-    console.log(result)
   }
 
   async getLatestFromDB () {
@@ -53,6 +52,22 @@ class DbVersion {
   async getPending () {
     const pending = await this.umzug.pending()
     return pending
+  }
+
+  async versionCorrect () {
+    const numberPending = await this.getPending().length
+    if (numberPending > 0) {
+      throw new Error('Pending Database migrations exist')
+    }
+    // Check that the current database version exists in known migrations.
+    await this.refreshCurrentDatabaseVersion()
+    if (this.currentDatabaseVersion === '') {
+      throw new Error('No database version could be found')
+    }
+    if (this.availableVersions.findIndex(x => x === this.currentDatabaseVersion.name) < 0) {
+      throw new Error('Current database version unknown to this code')
+    }
+    return true
   }
 }
 
