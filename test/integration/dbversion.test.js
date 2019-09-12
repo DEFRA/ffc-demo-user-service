@@ -1,5 +1,4 @@
 describe('User service integration test', () => {
-
   const dbVersion = require('../../server/dbversion')
 
   async function truncateVersionTable () {
@@ -37,6 +36,7 @@ describe('User service integration test', () => {
     } catch (error) {
       expect(error.message).toEqual('No database version could be found')
     }
+
     // Pretend we've got an existing migration in the database
     await dbVersion.umzug.storage.model.upsert({ name: dbVersion.highestVersion })
     try {
@@ -47,6 +47,7 @@ describe('User service integration test', () => {
     } catch (error) {
       console.log(error)
     }
+
     // Pretend we've got an unknown migration in the database
     await dbVersion.umzug.storage.model.upsert({ name: 'zzzzzzzzzzesttest.nofile' })
     try {
@@ -57,8 +58,5 @@ describe('User service integration test', () => {
     } catch (error) {
       expect(error.message).toEqual('Current database version unknown to this code')
     }
-  })
-
-  afterAll(async () => {
   })
 })
