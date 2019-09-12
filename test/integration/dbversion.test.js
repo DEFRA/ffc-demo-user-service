@@ -26,8 +26,8 @@ describe('User service integration test', () => {
     expect(pending.length).toBeGreaterThan(0)
   })
 
-  test('dbVersion reports an issue if there are database version inconsistancies', async () => {
-    expect.assertions(3)
+  test('dbVersion reports an issue if there are no database versions stored', async () => {
+    expect.assertions(1)
     try {
       const retval = await dbVersion.versionCorrect()
       if (retval) {
@@ -36,8 +36,10 @@ describe('User service integration test', () => {
     } catch (error) {
       expect(error.message).toEqual('No database version could be found')
     }
+  })
 
-    // Pretend we've got an existing migration in the database
+  test('dbVersion does not report an issue if there is a valid database version', async () => {
+    expect.assertions(1)
     await dbVersion.umzug.storage.model.upsert({ name: dbVersion.highestVersion })
     try {
       const retval = await dbVersion.versionCorrect()
@@ -47,8 +49,10 @@ describe('User service integration test', () => {
     } catch (error) {
       console.log(error)
     }
+  })
 
-    // Pretend we've got an unknown migration in the database
+  test('dbVersion reports an issue if there are is an unknown database version', async () => {
+    expect.assertions(1)
     await dbVersion.umzug.storage.model.upsert({ name: 'zzzzzzzzzzesttest.nofile' })
     try {
       const retval = await dbVersion.versionCorrect()
