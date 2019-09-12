@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const Umzug = require('umzug')
-const db = require('../models')
+const db = require('./models')
 
 // Sequelize uses umzug as the engine for running migrations, and stored completed migrations in a table
 // This module queries that table to see what migrations have been run against the database, and checks
@@ -25,7 +25,7 @@ class DbVersion {
         path: 'server/migrations'
       }
     })
-    const migrationPath = path.join(__dirname, '..', 'migrations')
+    const migrationPath = path.join(__dirname, 'migrations')
 
     fs
       .readdirSync(migrationPath)
