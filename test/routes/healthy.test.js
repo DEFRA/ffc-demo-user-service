@@ -4,6 +4,9 @@ describe('Healthy test', () => {
   let dbService
 
   beforeAll(async () => {
+    jest.mock('../../server/dbversion')
+    const dbversion = require('../../server/dbversion')
+    dbversion.versionCorrect = jest.fn().mockReturnValue(true)
     createServer = require('../../server')
     jest.mock('../../server/services/database-service')
     dbService = require('../../server/services/database-service')
