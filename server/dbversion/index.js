@@ -3,6 +3,14 @@ const path = require('path')
 const Umzug = require('umzug')
 const db = require('../models')
 
+// Sequelize uses umzug as the engine for running migrations, and stored completed migrations in a table
+// This module queries that table to see what migrations have been run against the database, and checks
+// against what migrations are available to this code. If there is a mismatch the versionCorrect method
+// will raise an error.
+// If sequelize stops using umzug in the future, umzug can be used to run the migrations directly so
+// we can have complete control of that part as well. We can also do this if it becomes necessary to
+// store things such as the date a migration took place, or was rolled back.
+
 class DbVersion {
   constructor () {
     this.availableVersions = []
