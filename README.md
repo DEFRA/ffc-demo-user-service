@@ -46,59 +46,69 @@ Running the tests locally requires a Postgres database for integration tests, an
 
 # Running the application
 
-The application is designed to run as a container via Docker Compose or Kubernetes (with Helm).
+The application is designed to run in containerised environments: Docker Compose for development; Kubernetes for production.
 
-## Using Docker Compose
+A Helm chart is provided for deployment to Kubernetes and scripts are provided for local development and testing.
 
-A set of convenience scripts are provided for local development and running via Docker Compose.
+## Build container image
+
+Container images are built using Docker Compose and the same image may be run in either Docker Compose or Kubernetes.
+
+The [`build`](./scripts/build) script is essentially a shortcut and will pass any arguments through to the `docker-compose build` command.
 
 ```
-# Build service containers
+# Build images using default Docker behaviour
 scripts/build
 
+# Build images without using the Docker cache
+scripts/build --no-cache
+```
+
+## Run as an isolated service
+
+To test this service in isolation, use the provided scripts to start and stop a local instance. This relies on Docker Compose and will run direct dependencies, such as message queues and databases, as additional containers. Arguments given to the [`start`](./scripts/start) script will be passed through to the `docker-compose up` command.
+
+```
 # Start the service and attach to running containers (press `ctrl + c` to quit)
 scripts/start
+
+# Start the service without attaching to containers
+scripts/start --detach
+
+# Send a sample request to the /submit endpoint
+curl  -i --header "Content-Type: application/json" \
+  --request POST \
+  --data '{ "claimId": "MINE123", "propertyType": "business",  "accessible": false,   "dateOfSubsidence": "2019-07-26T09:54:19.622Z",  "mineType": ["gold"] }' \
+  http://localhost:3003/submit
 
 # Stop the service and remove Docker volumes and networks created by the start script
 scripts/stop
 ```
 
-Any arguments provided to the build and start scripts are passed to the Docker Compose `build` and `up` commands, respectively. For example:
+## Connect to sibling services
+
+To test this service in combination with other parts of the Mine Support application, it is necessary to connect each service to an external Docker network and shared dependencies, such as message queues. Start the shared dependencies from the [`mine-support-development`](https://github.com/DEFRA/mine-support-development) repository and then use the `connected-` [`scripts`](./scripts/) to start this service. Follow instructions in other repositories to connect each service to the shared dependencies and network.
 
 ```
-# Build without using the Docker cache
-scripts/build --no-cache
+# Start the service
+script/connected-start
 
-# Start the service without attaching to containers
-scripts/start --detach
+# Stop the service
+script/connected-stop
 ```
 
-This service depends on an external Docker network named `ffc-demo` to communicate with other services running alongside it. The start script will automatically create the network if it doesn't exist and the stop script will remove the network if no other containers are using it.
+## Deploy to Kubernetes
 
-The external network is declared in a secondary Docker Compose configuration (referenced by the above scripts) so that this service can be run in isolation without creating an external Docker network by using standard Docker Compose commands:
+For production deployments, a helm chart is included in the `.\helm` folder. This service connects to an AMQP 1.0 message broker, using credentials defined in [values.yaml](./helm/values.yaml), which must be made available prior to deployment.
 
-```
-# Build containers
-docker-compose build
-
-# Start the service is isolation
-docker-compose up
-```
-
-### Volume mounts on Windows Subsystem for Linux
-
-For the volume mounts to work correct via WSL it is necessary to either set up automounting of `/mnt/c`, or change the mount point for the shared drive from `/mnt/c` to `/c`. For a well-explained write-up, see [this blog post](https://nickjanetakis.com/blog/setting-up-docker-for-windows-and-wsl-to-work-flawlessly) by Nick Janetakis.
-
-## Using Kubernetes
-
-The service has been developed with the intention of running on Kubernetes in production.  A helm chart is included in the `./helm` folder, which may be tested against a local Kubernetes cluster using the provided [Helm install](./scripts/helm/install) script. This will install the required PostgreSQL instance with persistence disabled to facilitate local deployment testing.
+Scripts are provided to test the Helm chart by deploying the service, along with an appropriate message broker, into the current Helm/Kubernetes context.
 
 ```
-# Build service containers
-scripts/build
-
-# Deploy to the current Helm context
+# Deploy to current Kubernetes context
 scripts/helm/install
+
+# Remove from current Kubernetes context
+scripts/helm/delete
 ```
 
 ### Accessing the pod
@@ -128,7 +138,7 @@ Sample valid JSON that can be posted is:
 Alternatively curl can be used locally to send a request to the end point, i.e.
 
 ```
-curl  -i --header "Content-Type: application/json" --request POST --data '{ "email": "test@email.com" }' http://localhost:3002/register
+curl -i --header "Content-Type: application/json" --request POST --data '{ "email": "test@email.com" }' http://localhost:3002/register
 ```
 
 # Build pipeline
