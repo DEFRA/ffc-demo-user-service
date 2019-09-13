@@ -1,0 +1,16 @@
+version: '3.4'
+
+# This override file should be used when running automated tests so
+# that test output is saved to the host
+
+services:
+  mine-support-user-service:
+    environment:
+      NODE_ENV: development
+      POSTGRES_DB: mine_users
+      POSTGRES_PASSWORD: ppp
+      POSTGRES_USERNAME: postgres
+      POSTGRES_HOST: mine-support-user-postgres
+      POSTGRES_PORT: 5432
+    command: sh -c "npm run migrate"
+
