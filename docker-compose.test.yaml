@@ -4,7 +4,7 @@ version: '3.4'
 # that test output is saved to the host
 
 services:
-  mine-support-user-service:
-    command: sh -c "scripts/wait-for/wait-for mine-support-user-postgres:5432 -- npm run migrate && npm run test"
+  ffc-demo-user-service:
+    command: sh -c "scripts/wait-for/wait-for ffc-demo-user-postgres:5432 -- npm run migrate && npm run test"
     volumes:
       - ./test-output:/usr/src/app/test-output
