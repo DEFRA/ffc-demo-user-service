@@ -4,7 +4,7 @@ version: '3.4'
 # bind-mount the app from the host into the container
 
 services:
-  mine-support-user-service:
+  ffc-demo-user-service:
     ports:
       - "3002:3002"
     volumes:

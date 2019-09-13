@@ -1,35 +1,35 @@
 version: '3.4'
 services:
-  mine-support-user-service:
+  ffc-demo-user-service:
     build: .
-    image: mine-support-user-service
-    container_name: mine-support-user-service
-    command: sh -c "scripts/wait-for/wait-for mine-support-user-postgres:5432 -- npm run migrate && npm run start:watch"
+    image: ffc-demo-user-service
+    container_name: ffc-demo-user-service
+    command: sh -c "scripts/wait-for/wait-for ffc-demo-user-postgres:5432 -- npm run migrate && npm run start:watch"
     depends_on:
-      - mine-support-user-postgres
+      - ffc-demo-user-postgres
     environment:
-      POSTGRES_DB: mine_users
+      POSTGRES_DB: ffc_demo_users
       POSTGRES_PASSWORD: ppp
       POSTGRES_USERNAME: postgres
-      POSTGRES_HOST: mine-support-user-postgres
+      POSTGRES_HOST: ffc-demo-user-postgres
       POSTGRES_PORT: 5432
     networks:
-      - mine-support-users
+      - ffc-demo-users
 
-  mine-support-user-postgres:
-    container_name: mine-support-user-postgres
+  ffc-demo-user-postgres:
+    container_name: ffc-demo-user-postgres
     image: postgres:11.4-alpine
     environment:
-      POSTGRES_DB: mine_users
+      POSTGRES_DB: ffc_demo_users
       POSTGRES_PASSWORD: ppp
       POSTGRES_USERNAME: postgres
     networks:
-      - mine-support-users
+      - ffc-demo-users
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
 networks:
-  mine-support-users: {}
+  ffc-demo-users: {}
 
 volumes:
   postgres_data:

@@ -6,7 +6,7 @@ projectRoot="$(a="/$0"; a=${a%/*}; a=${a:-.}; a=${a#/}/; cd "$a/.." || return; p
 # Check whether mine-support network needs creating
 if [ -z "$(docker network ls --filter name=^mine-support$ --format={{.Name}})" ]; then
   echo "Creating mine-support network"
-  docker network create mine-support
+  docker network create ffc-demo
 fi
 
 (

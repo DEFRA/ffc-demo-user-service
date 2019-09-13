@@ -10,24 +10,24 @@ projectRoot="$(a="/$0"; a=${a%/*}; a=${a:-.}; a=${a#/}/; cd "$a/../.." || return
   helm upgrade \
     --atomic \
     --install \
-    --namespace mine-support-user-service \
+    --namespace ffc-demo-user-service \
     --set persistence.enabled=false \
     --set postgresqlDatabase=mine_users \
     --set postgresqlPassword=changeme \
     --set postgresqlUsername=postgres@mine-support2 \
     --set service.port=5432 \
     --wait \
-    mine-support-user-postgres \
+    ffc-demo-user-postgres \
     stable/postgresql
 
   echo "Deploying user service"
   helm upgrade \
     --atomic \
     --install \
-    --namespace mine-support-user-service \
-    --set postgresHost=mine-support-user-postgres-postgresql \
-    --set postgresServiceName=mine-support-user-postgres \
+    --namespace ffc-demo-user-service \
+    --set postgresHost=ffc-demo-user-postgres-postgresql \
+    --set postgresServiceName=ffc-demo-user-postgres \
     --wait \
-    mine-support-user-service \
+    ffc-demo-user-service \
     ./helm
 )
