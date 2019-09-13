@@ -73,7 +73,7 @@ class DbVersion {
       throw new Error('No database version could be found')
     }
     if (this.availableVersions.findIndex(x => x === this.currentDatabaseVersion.name) < 0) {
-      throw new Error('Current database version unknown to this code')
+      throw new Error(`Current database version (${this.currentDatabaseVersion.name}) unknown to this code. Highest version known is (${this.highestVersion})`)
     }
     return true
   }
