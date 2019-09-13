@@ -4,7 +4,23 @@
 
 Digital service mock to claim public money in the event property subsides into mine shaft.  The user service receives user data and if it doesn’t already exist saves it in a Postgresql database table.
 
+# Prerequisites
+
+Either:
+- Docker
+- Docker Compose
+
+Or:
+- Kubernetes
+- Helm
+
+Or:
+- Node 10
+- PostgreSQL database
+
 # Environment variables
+
+The following environment variables are required by the application container. Values for development are set in the Docker Compose configuration. Default values for production-like deployments are set in the Helm chart and may be overridden by build and release pipelines.
 
 | Name              | Description       | Required | Default     | Valid                     | Notes |
 |-------------------|-------------------|:--------:|-------------|---------------------------|-------|
@@ -15,11 +31,6 @@ Digital service mock to claim public money in the event property subsides into m
 | POSTGRES_DB       | Postgres database | yes      |             |                           |       |
 | POSTGRES_HOST     | Postgres host     | yes      |             |                           |       |
 | POSTGRES_PORT     | Postgres port     | yes      |             |                           |       |
-
-# Prerequisites
-
-- Node v10+
-- Access to a PostgreSQL database
 
 # How to run tests
 
