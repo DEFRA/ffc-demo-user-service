@@ -4,7 +4,7 @@ services:
     build: .
     image: ffc-demo-user-service
     container_name: ffc-demo-user-service
-    command: sh -c "scripts/wait-for/wait-for ffc-demo-user-postgres:5432 -- npm run migrate && npm run start:watch"
+    command: sh -c "npm run start:watch"
     depends_on:
       - ffc-demo-user-postgres
     environment:
