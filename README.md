@@ -75,11 +75,8 @@ scripts/start
 # Start the service without attaching to containers
 scripts/start --detach
 
-# Send a sample request to the /submit endpoint
-curl  -i --header "Content-Type: application/json" \
-  --request POST \
-  --data '{ "claimId": "MINE123", "propertyType": "business",  "accessible": false,   "dateOfSubsidence": "2019-07-26T09:54:19.622Z",  "mineType": ["gold"] }' \
-  http://localhost:3003/submit
+# Send a sample request to the /register endpoint
+curl -i --header "Content-Type: application/json" --request POST --data '{ "email": "test@email.com" }' http://localhost:3002/register
 
 # Stop the service and remove Docker volumes and networks created by the start script
 scripts/stop
@@ -135,7 +132,7 @@ Sample valid JSON that can be posted is:
 }
 ```
 
-Alternatively curl can be used locally to send a request to the end point, i.e.
+Alternatively, curl can be used to send a request to the end point:
 
 ```
 curl -i --header "Content-Type: application/json" --request POST --data '{ "email": "test@email.com" }' http://localhost:3002/register
