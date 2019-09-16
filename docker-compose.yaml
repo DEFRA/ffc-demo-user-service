@@ -7,8 +7,5 @@ services:
     command: sh -c "npm run start:watch"
     environment:
       POSTGRES_DB: ffc_demo_users
-      POSTGRES_PASSWORD: ppp
-      POSTGRES_USERNAME: postgres
-      POSTGRES_HOST: ffc-demo-user-postgres
       POSTGRES_PORT: 5432
 
