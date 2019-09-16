@@ -130,10 +130,10 @@ steps:
     azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
     azureContainerRegistry: $(azureContainerRegistryFull)
     dockerComposeFile: docker-compose.yaml
-    additionalDockerComposeFiles: docker-compose.test.yaml
+    additionalDockerComposeFiles: docker-compose.migrate.yaml
     projectName: $(Build.Repository.Name)
     qualifyImageNames: true
-    dockerComposeCommand: run $(containerMigrateTag)
+    dockerComposeCommand: run $(imageName)
   displayName: run migration for PR images
   # push container to registry
 - task: DockerCompose@0
