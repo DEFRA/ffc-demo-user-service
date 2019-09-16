@@ -4,7 +4,23 @@
 
 Digital service mock to claim public money in the event property subsides into mine shaft.  The user service receives user data and if it doesn’t already exist saves it in a Postgresql database table.
 
+# Prerequisites
+
+Either:
+- Docker
+- Docker Compose
+
+Or:
+- Kubernetes
+- Helm
+
+Or:
+- Node 10
+- PostgreSQL database
+
 # Environment variables
+
+The following environment variables are required by the application container. Values for development are set in the Docker Compose configuration. Default values for production-like deployments are set in the Helm chart and may be overridden by build and release pipelines.
 
 | Name              | Description       | Required | Default     | Valid                     | Notes |
 |-------------------|-------------------|:--------:|-------------|---------------------------|-------|
@@ -15,11 +31,6 @@ Digital service mock to claim public money in the event property subsides into m
 | POSTGRES_DB       | Postgres database | yes      |             |                           |       |
 | POSTGRES_HOST     | Postgres host     | yes      |             |                           |       |
 | POSTGRES_PORT     | Postgres port     | yes      |             |                           |       |
-
-# Prerequisites
-
-- Node v10+
-- Access to a PostgreSQL database
 
 # How to run tests
 
@@ -46,59 +57,66 @@ Running the tests locally requires a Postgres database for integration tests, an
 
 # Running the application
 
-The application is designed to run as a container via Docker Compose or Kubernetes (with Helm).
+The application is designed to run in containerised environments: Docker Compose for development; Kubernetes for production.
 
-## Using Docker Compose
+A Helm chart is provided for deployment to Kubernetes and scripts are provided for local development and testing.
 
-A set of convenience scripts are provided for local development and running via Docker Compose.
+## Build container image
+
+Container images are built using Docker Compose and the same image may be run in either Docker Compose or Kubernetes.
+
+The [`build`](./scripts/build) script is essentially a shortcut and will pass any arguments through to the `docker-compose build` command.
 
 ```
-# Build service containers
+# Build images using default Docker behaviour
 scripts/build
 
+# Build images without using the Docker cache
+scripts/build --no-cache
+```
+
+## Run as an isolated service
+
+To test this service in isolation, use the provided scripts to start and stop a local instance. This relies on Docker Compose and will run direct dependencies, such as message queues and databases, as additional containers. Arguments given to the [`start`](./scripts/start) script will be passed through to the `docker-compose up` command.
+
+```
 # Start the service and attach to running containers (press `ctrl + c` to quit)
 scripts/start
+
+# Start the service without attaching to containers
+scripts/start --detach
+
+# Send a sample request to the /register endpoint
+curl -i --header "Content-Type: application/json" --request POST --data '{ "email": "test@email.com" }' http://localhost:3002/register
 
 # Stop the service and remove Docker volumes and networks created by the start script
 scripts/stop
 ```
 
-Any arguments provided to the build and start scripts are passed to the Docker Compose `build` and `up` commands, respectively. For example:
+## Connect to sibling services
+
+To test this service in combination with other parts of the FFC demo application, it is necessary to connect each service to an external Docker network and shared dependencies, such as message queues. Start the shared dependencies from the [`mine-support-development`](https://github.com/DEFRA/mine-support-development) repository and then use the `connected-` [`scripts`](./scripts/) to start this service. Follow instructions in other repositories to connect each service to the shared dependencies and network.
 
 ```
-# Build without using the Docker cache
-scripts/build --no-cache
+# Start the service
+script/connected-start
 
-# Start the service without attaching to containers
-scripts/start --detach
+# Stop the service
+script/connected-stop
 ```
 
-This service depends on an external Docker network named `ffc-demo` to communicate with other services running alongside it. The start script will automatically create the network if it doesn't exist and the stop script will remove the network if no other containers are using it.
+## Deploy to Kubernetes
 
-The external network is declared in a secondary Docker Compose configuration (referenced by the above scripts) so that this service can be run in isolation without creating an external Docker network by using standard Docker Compose commands:
+For production deployments, a helm chart is included in the `.\helm` folder. This service connects to an AMQP 1.0 message broker, using credentials defined in [values.yaml](./helm/values.yaml), which must be made available prior to deployment.
 
-```
-# Build containers
-docker-compose build
-
-# Start the service is isolation
-docker-compose up
-```
-
-### Volume mounts on Windows Subsystem for Linux
-
-For the volume mounts to work correct via WSL it is necessary to either set up automounting of `/mnt/c`, or change the mount point for the shared drive from `/mnt/c` to `/c`. For a well-explained write-up, see [this blog post](https://nickjanetakis.com/blog/setting-up-docker-for-windows-and-wsl-to-work-flawlessly) by Nick Janetakis.
-
-## Using Kubernetes
-
-The service has been developed with the intention of running on Kubernetes in production.  A helm chart is included in the `./helm` folder, which may be tested against a local Kubernetes cluster using the provided [Helm install](./scripts/helm/install) script. This will install the required PostgreSQL instance with persistence disabled to facilitate local deployment testing.
+Scripts are provided to test the Helm chart by deploying the service, along with an appropriate message broker, into the current Helm/Kubernetes context.
 
 ```
-# Build service containers
-scripts/build
-
-# Deploy to the current Helm context
+# Deploy to current Kubernetes context
 scripts/helm/install
+
+# Remove from current Kubernetes context
+scripts/helm/delete
 ```
 
 ### Accessing the pod
@@ -125,10 +143,10 @@ Sample valid JSON that can be posted is:
 }
 ```
 
-Alternatively curl can be used locally to send a request to the end point, i.e.
+Alternatively, curl can be used to send a request to the end point:
 
 ```
-curl  -i --header "Content-Type: application/json" --request POST --data '{ "email": "test@email.com" }' http://localhost:3002/register
+curl -i --header "Content-Type: application/json" --request POST --data '{ "email": "test@email.com" }' http://localhost:3002/register
 ```
 
 # Build pipeline
@@ -145,7 +163,7 @@ A detailed description on the build pipeline and PR work flow is available in th
 
 ## Testing a pull request
 
-A PR can be tested by reconfiguring the mine-gateway service to use the URL of the PR rather than the current release in the development cluster. Create a `patch.yaml` file containing the desired URL:
+A PR can be tested by reconfiguring the user service to use the URL of the PR rather than the current release in the development cluster. Create a `patch.yaml` file containing the desired URL:
 
 ```
 apiVersion: extensions/v1beta1
@@ -156,7 +174,7 @@ spec:
       containers:
       - env:
         - name: FFC_DEMO_USER_SERVICE
-          value: http://ffc-demo-user-service.mine-support-user-service-pr2
+          value: http://ffc-demo-user-service.ffc-demo-user-service-pr2
         name: ffc-demo-user-service
 ```
 
