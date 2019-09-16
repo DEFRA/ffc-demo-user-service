@@ -5,8 +5,6 @@ services:
     image: ffc-demo-user-service
     container_name: ffc-demo-user-service
     command: sh -c "npm run start:watch"
-    depends_on:
-      - ffc-demo-user-postgres
     environment:
       POSTGRES_DB: ffc_demo_users
       POSTGRES_PASSWORD: ppp
