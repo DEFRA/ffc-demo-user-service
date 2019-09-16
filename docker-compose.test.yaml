@@ -6,8 +6,15 @@ version: '3.4'
 services:
   ffc-demo-user-service:
     command: sh -c "scripts/wait-for/wait-for ffc-demo-user-postgres:5432 -- npm run migrate && npm run test"
+    environment:
+      POSTGRES_DB: ffc_demo_users
+      POSTGRES_PASSWORD: ppp
+      POSTGRES_USERNAME: postgres
+      POSTGRES_HOST: ffc-demo-user-postgres
+      POSTGRES_PORT: 5432
     volumes:
       - ./test-output:/usr/src/app/test-output
+
   ffc-demo-user-postgres:
     container_name: ffc-demo-user-postgres
     image: postgres:11.4-alpine
