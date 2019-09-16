@@ -12,6 +12,8 @@ services:
       POSTGRES_USERNAME: postgres
       POSTGRES_HOST: ffc-demo-user-postgres
       POSTGRES_PORT: 5432
+    networks:
+      - ffc-demo-users
     volumes:
       - ./test-output:/usr/src/app/test-output
 
@@ -25,10 +27,10 @@ services:
     networks:
       - ffc-demo-users
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - test_postgres_data:/var/lib/postgresql/data
 
 networks:
   ffc-demo-users: {}
 
 volumes:
-  postgres_data:
+  test_postgres_data:
