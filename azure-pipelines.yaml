@@ -122,6 +122,19 @@ steps:
     qualifyImageNames: true
     additionalImageTags: $(containerMigrateTag)
   displayName: build migration image
+  # run migration for PR images
+- task: DockerCompose@0
+  condition: and(succeeded(), eq(variables['mergedPrNo'], ''))
+  inputs:
+    containerregistrytype: Azure Container Registry
+    azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+    azureContainerRegistry: $(azureContainerRegistryFull)
+    dockerComposeFile: docker-compose.yaml
+    additionalDockerComposeFiles: docker-compose.test.yaml
+    projectName: $(Build.Repository.Name)
+    qualifyImageNames: true
+    dockerComposeCommand: run $(containerMigrateTag)
+  displayName: run migration for PR images
   # push container to registry
 - task: DockerCompose@0
   inputs:
