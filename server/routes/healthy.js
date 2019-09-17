@@ -6,19 +6,22 @@ module.exports = {
   path: '/healthy',
   options: {
     handler: async (request, h) => {
-      let allOk = false
+      const failures = []
       try {
         if (await dbService.isConnected()) {
-          if (await dbVersion.versionCorrect()) {
-            allOk = true
+          if (!await dbVersion.versionCorrect()) {
+            failures.push('database version incorrect')
           }
+        } else {
+          failures.push('database not connected')
         }
       } catch (error) {
-        allOk = false
+        failures.push(`Error raised during health check :${error.message}`)
       }
-      if (allOk) {
+      if (failures.length === 0) {
         return h.response('ok').code(200)
       } else {
+        console.log(failures)
         return h.response('not ok').code(500)
       }
     }
