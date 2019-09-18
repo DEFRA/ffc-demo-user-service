@@ -5,7 +5,7 @@ const db = require('./models')
 
 // Sequelize uses umzug as the engine for running migrations, and stored completed migrations in a table
 // This module queries that table to see what migrations have been run against the database, and checks
-// against what migrations are available to this code. If there is a mismatch the versionCorrect method
+// against what migrations are available to this code. If there is a mismatch the throwAnyErrors method
 // will raise an error.
 // If sequelize stops using umzug in the future, umzug can be used to run the migrations directly so
 // we can have complete control of that part as well. We can also do this if it becomes necessary to
@@ -27,23 +27,16 @@ class DbVersion {
     })
     const migrationPath = path.join(__dirname, 'migrations')
 
-    fs
+    this.availableVersions = fs
       .readdirSync(migrationPath)
-      .filter(file => {
-        return (path.extname(file) === '.js')
-      })
-      .forEach(file => {
-        this.availableVersions.push(file)
-      })
-    this.availableVersions = this.availableVersions.sort()
-    this.highestVersion = this.availableVersions[this.availableVersions.length - 1]
+      .filter(file => path.extname(file) === '.js')
+      .sort((a, b) => -a.localeCompare(b))
+    this.highestVersion = this.availableVersions.length > 0 ? this.availableVersions[0] : ''
   }
 
   async refreshCurrentDatabaseVersion () {
     const result = await this.getLatestFromDB()
-    if (result.length > 0) {
-      this.currentDatabaseVersion = result[0]
-    }
+    this.currentDatabaseVersion = result.length > 0 ? result[0] : ''
   }
 
   async getLatestFromDB () {
@@ -62,8 +55,8 @@ class DbVersion {
     return pending
   }
 
-  async versionCorrect () {
-    const numberPending = await this.getPending().length
+  async throwAnyErrors () {
+    const numberPending = (await this.getPending()).length
     if (numberPending > 0) {
       throw new Error('Pending Database migrations exist')
     }
@@ -72,7 +65,7 @@ class DbVersion {
     if (this.currentDatabaseVersion === '') {
       throw new Error('No database version could be found')
     }
-    if (this.availableVersions.findIndex(x => x === this.currentDatabaseVersion.name) < 0) {
+    if (!this.availableVersions.includes(this.currentDatabaseVersion.name)) {
       throw new Error(`Current database version (${this.currentDatabaseVersion.name}) unknown to this code. Highest version known is (${this.highestVersion})`)
     }
     return true

@@ -5,7 +5,7 @@ describe('Healthz test', () => {
   beforeAll(async () => {
     jest.mock('../../server/dbversion')
     const dbversion = require('../../server/dbversion')
-    dbversion.versionCorrect = jest.fn().mockReturnValue(true)
+    dbversion.throwAnyErrors = jest.fn().mockReturnValue()
     createServer = require('../../server')
   })
 

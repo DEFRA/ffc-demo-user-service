@@ -13,7 +13,7 @@ describe('Healthy test', () => {
   })
 
   beforeEach(async () => {
-    dbversion.versionCorrect = jest.fn().mockReturnValue(true)
+    dbversion.throwAnyErrors = jest.fn().mockReturnValue(true)
     server = await createServer()
     await server.initialize()
   })
@@ -49,7 +49,7 @@ describe('Healthy test', () => {
     }
 
     dbService.isConnected = jest.fn(() => true)
-    dbversion.versionCorrect = jest.fn(async () => { throw new Error('Mock error') })
+    dbversion.throwAnyErrors = jest.fn(async () => { throw new Error('Mock error') })
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(500)

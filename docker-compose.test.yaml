@@ -9,6 +9,7 @@ services:
     depends_on:
       - ffc-demo-user-postgres
     environment:
+      NODE_ENV: test
       POSTGRES_DB: ffc_demo_users
       POSTGRES_PASSWORD: ppp
       POSTGRES_USERNAME: postgres

@@ -28,18 +28,18 @@ describe('User service integration test', () => {
 
   test('dbVersion reports an issue if there are no database versions stored', async () => {
     expect.assertions(1)
-    await expect(dbVersion.versionCorrect()).rejects.toThrow()
+    await expect(dbVersion.throwAnyErrors()).rejects.toThrow()
   })
 
   test('dbVersion does not report an issue if there is a valid database version', async () => {
     expect.assertions(1)
     await dbVersion.umzug.storage.model.upsert({ name: dbVersion.highestVersion })
-    await expect(dbVersion.versionCorrect()).resolves.toEqual(true)
+    await expect(dbVersion.throwAnyErrors()).resolves.not.toThrow()
   })
 
   test('dbVersion reports an issue if there are is an unknown database version', async () => {
     expect.assertions(1)
     await dbVersion.umzug.storage.model.upsert({ name: 'zzzzzzzzzzesttest.nofile' })
-    await expect(dbVersion.versionCorrect()).rejects.toThrow()
+    await expect(dbVersion.throwAnyErrors()).rejects.toThrow()
   })
 })
