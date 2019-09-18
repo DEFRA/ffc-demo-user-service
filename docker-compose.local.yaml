@@ -5,8 +5,25 @@ version: '3.4'
 
 services:
   ffc-demo-user-service:
+    depends_on:
+      - ffc-demo-user-postgres
     networks:
       - ffc-demo
+
+  ffc-demo-user-postgres:
+    container_name: ffc-demo-user-postgres
+    image: postgres:11.4-alpine
+    environment:
+      POSTGRES_DB: ffc_demo_users
+      POSTGRES_PASSWORD: ppp
+      POSTGRES_USERNAME: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - user_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  user_postgres_data:
 
 networks:
   ffc-demo:
