@@ -6,7 +6,7 @@ describe('Web test', () => {
     jest.mock('../server/services/user-service')
     jest.mock('../server/dbversion')
     const dbversion = require('../server/dbversion')
-    dbversion.versionCorrect = jest.fn().mockReturnValue(true)
+    dbversion.throwAnyErrors = jest.fn().mockReturnValue()
     createServer = require('../server')
   })
 

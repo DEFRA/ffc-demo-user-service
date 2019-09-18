@@ -15,9 +15,7 @@ async function createServer () {
     }
   })
 
-  if (!await dbVersion.versionCorrect()) {
-    throw new Error('dbVersion check did not pass')
-  }
+  await dbVersion.throwAnyErrors()
 
   // Register the plugins
   await server.register(require('./plugins/router'))

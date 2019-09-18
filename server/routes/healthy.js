@@ -9,9 +9,7 @@ module.exports = {
       const failures = []
       try {
         if (await dbService.isConnected()) {
-          if (!await dbVersion.versionCorrect()) {
-            failures.push('database version incorrect')
-          }
+          await dbVersion.throwAnyErrors()
         } else {
           failures.push('database not connected')
         }
