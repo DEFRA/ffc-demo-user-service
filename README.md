@@ -154,15 +154,20 @@ curl -i --header "Content-Type: application/json" --request POST --data '{ "emai
 
 Dependencies should be managed within a container using the development image for the app. This will ensure that any packages with environment-specific variants are installed with the correct variant for the contained environment, rather than the host system which may differ between development and production.
 
-The container image should be rebuilt after any dependency change since dependencies are installed during the build.
+The [`run`](./scripts/run) script is provided to run arbitrary commands in a container using the development image.
 
-The `run` script is provided to run arbitrary commands against against the development container image.
+Since dependencies are installed into the container image, a full build should always be run immediately after any dependency change.
 
-For example, to update all dependencies:
+In development, the `node_modules` folder is mounted to a named volume. This volume must be removed in order for changes to `node_modules` to propagate from the rebuilt image into future instances of the app container. The [`reset`](./scripts/stop) script will rebuild images and reset local containers and volumes using the updated images.
+
+The following example will update all dependencies.
 
 ```
-script/run npm update
-script/build
+# Run the NPM update
+scripts/run npm update
+
+# Remove existing volumes and restart the service with updated images
+scripts/reset
 ```
 
 # Build pipeline
