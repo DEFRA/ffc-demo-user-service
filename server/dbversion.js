@@ -68,7 +68,6 @@ class DbVersion {
     if (!this.availableVersions.includes(this.currentDatabaseVersion)) {
       throw new Error(`Current database version (${this.currentDatabaseVersion}) unknown to this code. Highest version known is (${this.highestVersion})`)
     }
-    return true
   }
 }
 
