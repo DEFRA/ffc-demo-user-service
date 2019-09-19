@@ -1,5 +1,6 @@
 describe('dbVersion integration test', () => {
   const dbVersion = require('../../server/dbversion')
+  const dbVersionGetPending = dbVersion.getPending
 
   async function truncateVersionTable () {
     return dbVersion.umzug.storage.model.destroy({
@@ -10,6 +11,10 @@ describe('dbVersion integration test', () => {
 
   beforeEach(async () => {
     await truncateVersionTable()
+  })
+
+  afterEach(() => {
+    dbVersion.getPending = dbVersionGetPending
   })
 
   test('dbVersion gets a list of available migrations', () => {
@@ -32,22 +37,14 @@ describe('dbVersion integration test', () => {
   })
 
   test('dbVersion reports an issue if there are no database versions stored', async () => {
-    const oldFunction = dbVersion.getPending
     dbVersion.getPending = jest.fn(() => { return [] })
-
     await expect(dbVersion.throwAnyErrors()).rejects.toThrow('No database version could be found')
-
-    dbVersion.getPending = oldFunction
   })
 
   test('dbVersion does not report an issue if there is a valid database version', async () => {
-    const oldFunction = dbVersion.getPending
     dbVersion.getPending = jest.fn(() => { return [] })
-
     await dbVersion.umzug.storage.model.upsert({ name: dbVersion.highestVersion })
     await expect(dbVersion.throwAnyErrors()).resolves.not.toThrow()
-
-    dbVersion.getPending = oldFunction
   })
 
   test('dbVersion reports an issue if there are is an unknown database version', async () => {
