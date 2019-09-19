@@ -150,6 +150,21 @@ Alternatively, curl can be used to send a request to the end point:
 curl -i --header "Content-Type: application/json" --request POST --data '{ "email": "test@email.com" }' http://localhost:3002/register
 ```
 
+# Dependency management
+
+Dependencies should be managed within a container using the development image for the app. This will ensure that any packages with environment-specific variants are installed with the correct variant for the contained environment, rather than the host system which may differ between development and production.
+
+The container image should be rebuilt after any dependency change since dependencies are installed during the build.
+
+The `run` script is provided to run arbitrary commands against against the development container image.
+
+For example, to update all dependencies:
+
+```
+script/run npm update
+script/build
+```
+
 # Build pipeline
 
 The [azure-pipelines.yaml](azure-pipelines.yaml) performs the following tasks:
