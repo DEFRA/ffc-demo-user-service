@@ -1,4 +1,4 @@
-describe('User service integration test', () => {
+describe('dbVersion integration test', () => {
   const dbVersion = require('../../server/dbversion')
 
   async function truncateVersionTable () {
@@ -17,8 +17,9 @@ describe('User service integration test', () => {
   })
 
   test('dbVersion validates version in database', async () => {
+    await dbVersion.umzug.storage.model.upsert({ name: dbVersion.highestVersion })
     await dbVersion.refreshCurrentDatabaseVersion()
-    expect(dbVersion.currentDatabaseVersion).not.toBe(dbVersion.highestVersion)
+    expect(dbVersion.currentDatabaseVersion).toBe(dbVersion.highestVersion)
   })
 
   test('dbVersion reports a list of pending migrations', async () => {
@@ -26,19 +27,30 @@ describe('User service integration test', () => {
     expect(pending.length).toBeGreaterThan(0)
   })
 
+  test('dbVersion reports an issue if there are pending migrations', async () => {
+    await expect(dbVersion.throwAnyErrors()).rejects.toThrow('Pending Database migrations exist')
+  })
+
   test('dbVersion reports an issue if there are no database versions stored', async () => {
-    expect.assertions(1)
-    await expect(dbVersion.throwAnyErrors()).rejects.toThrow()
+    const oldFunction = dbVersion.getPending
+    dbVersion.getPending = jest.fn(() => { return [] })
+
+    await expect(dbVersion.throwAnyErrors()).rejects.toThrow('No database version could be found')
+
+    dbVersion.getPending = oldFunction
   })
 
   test('dbVersion does not report an issue if there is a valid database version', async () => {
-    expect.assertions(1)
+    const oldFunction = dbVersion.getPending
+    dbVersion.getPending = jest.fn(() => { return [] })
+
     await dbVersion.umzug.storage.model.upsert({ name: dbVersion.highestVersion })
     await expect(dbVersion.throwAnyErrors()).resolves.not.toThrow()
+
+    dbVersion.getPending = oldFunction
   })
 
   test('dbVersion reports an issue if there are is an unknown database version', async () => {
-    expect.assertions(1)
     await dbVersion.umzug.storage.model.upsert({ name: 'zzzzzzzzzzesttest.nofile' })
     await expect(dbVersion.throwAnyErrors()).rejects.toThrow()
   })
