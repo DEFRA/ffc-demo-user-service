@@ -154,7 +154,7 @@ curl -i --header "Content-Type: application/json" --request POST --data '{ "emai
 
 Dependencies should be managed within a container using the development image for the app. This will ensure that any packages with environment-specific variants are installed with the correct variant for the contained environment, rather than the host system which may differ between development and production.
 
-The [`run`](./scripts/run) script is provided to run arbitrary commands in a container using the development image.
+The [`cmd`](./scripts/cmd) script is provided to run arbitrary commands in a container using the development image.
 
 Since dependencies are installed into the container image, a full build should always be run immediately after any dependency change.
 
@@ -164,7 +164,7 @@ The following example will update all dependencies.
 
 ```
 # Run the NPM update
-scripts/run npm update
+scripts/cmd npm update
 
 # Remove existing volumes and restart the service with updated images
 scripts/reset
