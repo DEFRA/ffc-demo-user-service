@@ -12,19 +12,25 @@ const db = require('./models')
 // store things such as the date a migration took place, or was rolled back.
 
 class DbVersion {
-  constructor () {
+  constructor (options) {
     this.availableVersions = []
     this.highestVersion = ''
     this.currentDatabaseVersion = ''
-    this.umzug = new Umzug({
-      storage: 'sequelize',
-      storageOptions: {
-        sequelize: db.sequelize
-      },
-      migrations: {
-        path: 'server/migrations'
-      }
-    })
+    if (typeof options !== 'object') {
+      options = {}
+    }
+    if (typeof options.umzug !== 'object') {
+      options.umzug = new Umzug({
+        storage: 'sequelize',
+        storageOptions: {
+          sequelize: db.sequelize
+        },
+        migrations: {
+          path: 'server/migrations'
+        }
+      })
+    }
+    this.umzug = options.umzug
     const migrationPath = path.join(__dirname, 'migrations')
 
     this.availableVersions = fs
@@ -71,4 +77,4 @@ class DbVersion {
   }
 }
 
-module.exports = new DbVersion()
+module.exports = DbVersion

@@ -1,5 +1,6 @@
 describe('dbVersion integration test', () => {
-  const dbVersion = require('../../server/dbversion')
+  const DbVersion = require('../../server/dbversion')
+  const dbVersion = new DbVersion()
   const dbVersionGetPending = dbVersion.getPending
 
   async function truncateVersionTable () {
@@ -48,7 +49,7 @@ describe('dbVersion integration test', () => {
   })
 
   test('dbVersion reports an issue if there are is an unknown database version', async () => {
+    dbVersion.getPending = jest.fn(() => { return [] })
     await dbVersion.umzug.storage.model.upsert({ name: 'zzzzzzzzzzesttest.nofile' })
-    await expect(dbVersion.throwAnyErrors()).rejects.toThrow()
-  })
-})
+    await expect(dbVersion.throwAnyErrors()).rejects.toThrow(/^Current database version \(zzzzzzzzzzesttest.nofile\) unknown to this code/)
+  })})

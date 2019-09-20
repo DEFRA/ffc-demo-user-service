@@ -1,5 +1,6 @@
 const dbService = require('../services/database-service')
-const dbVersion = require('../dbversion')
+const DbVersion = require('../dbversion')
+const dbVersion = new DbVersion()
 
 module.exports = {
   method: 'GET',
