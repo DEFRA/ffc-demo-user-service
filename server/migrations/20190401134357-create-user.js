@@ -3,7 +3,6 @@ const Umzug = require('umzug')
 const db = require('../models')
 module.exports = {
   up: (queryInterface, Sequelize) => {
-
     const umzug = new Umzug({
       storage: 'sequelize',
       storageOptions: {
