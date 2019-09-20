@@ -53,4 +53,5 @@ describe('dbVersion integration test', () => {
     jest.spyOn(Umzug.prototype, 'pending').mockImplementation(() => { return [] })
     await dbVersion.umzug.storage.model.upsert({ name: 'zzzzzzzzzzesttest.nofile' })
     await expect(dbVersion.throwAnyErrors()).rejects.toThrow(/^Current database version \(zzzzzzzzzzesttest.nofile\) unknown to this code/)
-  })})
+  })
+})
