@@ -6,5 +6,5 @@ projectRoot="$(a="/$0"; a=${a%/*}; a=${a:-.}; a=${a#/}/; cd "$a/.." || return; p
 (
   cd "${projectRoot}"
 
-  docker run --rm ffc-demo-user-service $@
+  docker run --rm -it -v "$(pwd):/usr/src/app" ffc-demo-user-service $@
 )
