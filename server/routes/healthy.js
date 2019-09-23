@@ -1,22 +1,11 @@
-const dbService = require('../services/database-service')
-const DbVersion = require('../dbversion')
-const dbVersion = new DbVersion()
+const healthchecks = require('../tools/health-checks')
 
 module.exports = {
   method: 'GET',
   path: '/healthy',
   options: {
     handler: async (request, h) => {
-      const failures = []
-      try {
-        if (await dbService.isConnected()) {
-          await dbVersion.throwAnyErrors()
-        } else {
-          failures.push('database not connected')
-        }
-      } catch (error) {
-        failures.push(`Error raised during health check :${error.message}`)
-      }
+      const failures = await healthchecks.checkFailures()
       if (failures.length === 0) {
         return h.response('ok').code(200)
       } else {
