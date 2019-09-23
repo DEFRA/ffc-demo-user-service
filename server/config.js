@@ -1,10 +1,10 @@
 const joi = require('@hapi/joi')
 
 // Define config schema
-const schema = {
+const schema = joi.object({
   port: joi.number().default(3002),
   env: joi.string().valid('development', 'test', 'production').default('development')
-}
+})
 
 // Build config
 const config = {
@@ -13,7 +13,7 @@ const config = {
 }
 
 // Validate config
-const result = joi.validate(config, schema, {
+const result = schema.validate(config, {
   abortEarly: false
 })
 
