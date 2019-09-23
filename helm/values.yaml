@@ -14,7 +14,7 @@ service:
   port: 80
 container:
   imagePullPolicy: IfNotPresent
-  redeployOnChange: update this field to force a change.
+  redeployOnChange: update this field to force a change
   requestMemory: 30Mi
   requestCpu: 10m
   limitMemory: 60Mi
