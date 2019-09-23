@@ -1,12 +1,8 @@
 'use strict'
-const config = require('../config/config.js')
-const sysconfig = require('../config')
 const Umzug = require('umzug')
 const db = require('../models')
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    console.log(sysconfig)
-    console.log(config)
     const umzug = new Umzug({
       storage: 'sequelize',
       storageOptions: {
