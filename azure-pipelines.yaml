@@ -134,6 +134,8 @@ steps:
     projectName: $(Build.Repository.Name)
     qualifyImageNames: true
     dockerComposeCommand: run $(imageName)
+    dockerComposeFileArgs:
+      POSTGRES_PASSWORD=$(postgresPassword)
   displayName: run migration for PR images
   # push container to registry
 - task: DockerCompose@0
