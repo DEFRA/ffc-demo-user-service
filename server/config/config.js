@@ -14,4 +14,6 @@ const config = {
   test: dbConfig
 }
 
+console.log(config)
+
 module.exports = config

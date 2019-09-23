@@ -10,7 +10,7 @@ services:
       - ffc-demo-user-postgres
     environment:
       NODE_ENV: test
-      POSTGRES_DB: ffc_demo_users
+      POSTGRES_DB: ffc_demo_users_test
       POSTGRES_PASSWORD: ppp
       POSTGRES_USERNAME: postgres
       POSTGRES_HOST: ffc-demo-user-postgres
@@ -22,7 +22,7 @@ services:
     container_name: ffc-demo-user-postgres
     image: postgres:11.4-alpine
     environment:
-      POSTGRES_DB: ffc_demo_users
+      POSTGRES_DB: ffc_demo_users_test
       POSTGRES_PASSWORD: ppp
       POSTGRES_USERNAME: postgres
     ports:

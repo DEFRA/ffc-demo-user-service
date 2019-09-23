@@ -7,8 +7,6 @@ services:
   ffc-demo-user-service:
     depends_on:
       - ffc-demo-user-postgres
-    networks:
-      - ffc-demo
 
   ffc-demo-user-postgres:
     container_name: ffc-demo-user-postgres

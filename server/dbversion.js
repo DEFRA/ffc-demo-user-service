@@ -75,6 +75,13 @@ class DbVersion {
       throw new Error(`Current database version (${this.currentDatabaseVersion}) unknown to this code. Highest version known is (${this.highestVersion})`)
     }
   }
+
+  async clearCompleted () {
+    return this.umzug.storage.model.destroy({
+      where: {},
+      truncate: true
+    })
+  }
 }
 
 module.exports = DbVersion
