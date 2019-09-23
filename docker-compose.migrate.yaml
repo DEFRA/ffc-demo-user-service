@@ -12,5 +12,5 @@ services:
       POSTGRES_USERNAME:
       POSTGRES_HOST:
       POSTGRES_PORT:
-    command: sh -c "npm run migrate:clear"
+    command: sh -c "npm run migrate"
 
