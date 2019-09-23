@@ -150,6 +150,26 @@ Alternatively, curl can be used to send a request to the end point:
 curl -i --header "Content-Type: application/json" --request POST --data '{ "email": "test@email.com" }' http://localhost:3002/register
 ```
 
+# Database migrations
+
+Running the npm script
+
+```
+npm run migrate
+```
+
+Will run all the migration scripts to bring the database up to date. This script is run as part of the test suite, in order to create the database tables that are required for the tests to run.
+
+The migrate script uses the `sequelize-cli` module to run any update scripts that are outstanding. `sequelize` uses the `umzug` module internally. The `dbversion` code uses this module to see if any migrations are outstanding when the service starts. The readiness probe also uses the `dbversion` code to check if the latest database migration is known to it. If it is not (if for example another version has performed database updates) then the readiness monitor will return an error, so that traffic is not routed to this instance.
+
+This check is not run before every call deliberately. This would pose a performance issue. If the service was performing hundreds of requests per second, checking before every request would impose a penalty for very little gain. It would also be pointless, as errors should be dealt with properly at the time they occur, rather than trying to anticipate every one. There is also a race condition here, as even if the check was done before a request was handled it doesn't guarantee that the database would still be in the same state when the request completes.
+
+## Database migrations under kubernetes
+
+```
+TBC - Currently database migrations are only done as part of the PR and are not done during any part of the kubernetes initialisation.
+```
+
 # Build pipeline
 
 The [azure-pipelines.yaml](azure-pipelines.yaml) performs the following tasks:
