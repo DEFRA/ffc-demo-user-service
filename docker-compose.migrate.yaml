@@ -8,9 +8,9 @@ services:
     environment:
       NODE_ENV: development
       POSTGRES_DB: ffc_demo_users
-      POSTGRES_PASSWORD
-      POSTGRES_USERNAME
-      POSTGRES_HOST
+      POSTGRES_PASSWORD:
+      POSTGRES_USERNAME:
+      POSTGRES_HOST:
       POSTGRES_PORT: 5432
     command: sh -c "npm run migrate"
 
