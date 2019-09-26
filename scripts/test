@@ -3,24 +3,19 @@
 set -e
 projectRoot="$(a="/$0"; a=${a%/*}; a=${a:-.}; a=${a#/}/; cd "$a/.." || return; pwd)"
 
+compose() {
+  (cd "${projectRoot}" && docker-compose -f docker-compose.yaml -f docker-compose.test.yaml $@)
+}
+
 (
   cd "${projectRoot}"
 
   # Guarantee clean environment
-  docker-compose \
-    -f docker-compose.yaml \
-    -f docker-compose.test.yaml \
-     down -v
+  compose down --volumes
 
   # Run tests
-  docker-compose \
-    -f docker-compose.yaml \
-    -f docker-compose.test.yaml \
-    run ffc-demo-user-service
+  compose run ffc-demo-user-service
 
   # Clean up
-  docker-compose \
-    -f docker-compose.yaml \
-    -f docker-compose.test.yaml \
-     down -v
+  compose down --volumes
 )
