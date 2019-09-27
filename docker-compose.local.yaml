@@ -16,8 +16,6 @@ services:
       POSTGRES_PORT: 5432
     networks:
       - ffc-demo-users
-    ports:
-      - "3002:3002"
 
   ffc-demo-user-postgres:
     container_name: ffc-demo-user-postgres
