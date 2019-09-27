@@ -10,7 +10,6 @@
   "main": "index.js",
   "scripts": {
     "migrate": "npx sequelize db:migrate",
-    "migrate:clear": "node server/tools/clearall.js",
     "pretest": "npm run test:lint",
     "test": "npm run test:unit",
     "test:lint": "standard",
