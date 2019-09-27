@@ -5,7 +5,7 @@ const dbConfig = {
   host: process.env.POSTGRES_HOST,
   port: process.env.POSTGRES_PORT,
   dialect: 'postgres',
-  logging: false
+  logging: process.env.SEQUELIZE_LOGGING === 'true' ? msg => console.log(msg) : false
 }
 
 const config = {

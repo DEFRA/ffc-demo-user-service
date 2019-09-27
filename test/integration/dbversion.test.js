@@ -19,19 +19,15 @@ describe('dbVersion integration test', () => {
     Umzug.prototype.pending.mockRestore()
   })
 
-  test('dbVersion gets a list of available migrations', () => {
-    expect(dbVersion.availableVersions.length).toBeGreaterThan(0)
+  test('dbVersion gets a list of available migrations', async () => {
+    await dbVersion.refreshAvailableVersions()
+    await expect(dbVersion.availableVersions.length).toBeGreaterThan(0)
   })
 
   test('dbVersion validates version in database', async () => {
     await dbVersion.umzug.storage.model.upsert({ name: dbVersion.highestVersion })
     await dbVersion.refreshCurrentDatabaseVersion()
-    expect(dbVersion.currentDatabaseVersion).toBe(dbVersion.highestVersion)
-  })
-
-  test('dbVersion reports a list of pending migrations', async () => {
-    const pending = await dbVersion.getPending()
-    expect(pending.length).toBeGreaterThan(0)
+    await expect(dbVersion.currentDatabaseVersion).toBe(dbVersion.highestVersion)
   })
 
   test('dbVersion reports an issue if there are pending migrations', async () => {
