@@ -134,6 +134,7 @@ steps:
     dockerComposeCommand: run --no-deps --rm $(imageName)
     dockerComposeFileArgs:
       POSTGRES_PASSWORD=$(postgresPassword)
+      POSTGRES_HOST=$(postgresExternalName)
   displayName: run migration for PR images
   # push container to registry
 - task: DockerCompose@0
