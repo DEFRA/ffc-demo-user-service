@@ -4,7 +4,6 @@ services:
     build: .
     image: ffc-demo-user-service
     container_name: ffc-demo-user-service
-    command: sh -c "npm run start:watch"
     environment:
       NODE_ENV: production
       POSTGRES_DB: ffc_demo_users
