@@ -29,7 +29,8 @@
     "@hapi/hapi": "^18.4.0",
     "@hapi/joi": "^16.1.4",
     "pg": "^7.12.1",
-    "sequelize": "^5.19.0"
+    "sequelize": "^5.19.0",
+    "umzug": "^2.2.0"
   },
   "devDependencies": {
     "@hapi/good": "^8.2.3",

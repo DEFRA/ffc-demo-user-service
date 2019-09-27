@@ -1,0 +1,16 @@
+version: '3.4'
+
+# This override file should be used when running the migrations
+# to configure the database
+
+services:
+  ffc-demo-user-service:
+    environment:
+      NODE_ENV: development
+      POSTGRES_DB:
+      POSTGRES_PASSWORD:
+      POSTGRES_USERNAME:
+      POSTGRES_HOST:
+      POSTGRES_PORT:
+    command: sh -c "npm run migrate"
+

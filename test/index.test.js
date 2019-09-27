@@ -3,8 +3,11 @@ describe('Web test', () => {
   let server
 
   beforeAll(async () => {
-    createServer = require('../server')
     jest.mock('../server/services/user-service')
+    jest.mock('../server/dbversion')
+    const dbversion = require('../server/dbversion')
+    dbversion.throwAnyErrors = jest.fn().mockReturnValue()
+    createServer = require('../server')
   })
 
   beforeEach(async () => {
