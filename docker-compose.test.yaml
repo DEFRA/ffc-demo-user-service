@@ -19,6 +19,8 @@ services:
       POSTGRES_HOST: ffc-demo-user-test-postgres
       POSTGRES_PORT: 5432
     volumes:
+      - test_node_modules:/usr/src/app/node_modules
+      - .:/usr/src/app
       - ./test-output:/usr/src/app/test-output
     networks:
       - ffc-demo-user-test
@@ -35,9 +37,9 @@ services:
     networks:
       - ffc-demo-user-test
 
-volumes:
-  test_user_postgres_data:
 networks:
-  ffc-demo-user-test:
-    driver: bridge
-    internal: true
+  ffc-demo-user-test: {}
+
+volumes:
+  test_user_postgres_data: {}
+  test_node_modules: {}
