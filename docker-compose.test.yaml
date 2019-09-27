@@ -1,11 +1,14 @@
 version: '3.4'
 
-# This override file should be used when running automated tests so
+# This file should be used when running automated tests so
 # that test output is saved to the host
 
 services:
-  ffc-demo-user-service:
+  ffc-demo-user-test:
+    build: .
     command: sh -c "scripts/wait-for/wait-for ffc-demo-user-test-postgres:5432 -- npm run migrate && npm run test"
+    image: ffc-demo-user-test
+    container_name: ffc-demo-user-test
     depends_on:
       - ffc-demo-user-test-postgres
     environment:

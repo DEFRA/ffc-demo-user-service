@@ -1,0 +1,13 @@
+version: '3.4'
+
+# This override file should be used in development environments to
+# link this service to sibling services from other repositories
+
+services:
+  ffc-demo-user-service:
+    networks:
+      - ffc-demo
+
+networks:
+  ffc-demo:
+   external: true

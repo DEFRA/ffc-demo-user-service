@@ -4,13 +4,38 @@ services:
     build: .
     image: ffc-demo-user-service
     container_name: ffc-demo-user-service
+    command: sh -c "scripts/wait-for/wait-for ffc-demo-user-postgres:5432 -- npm run migrate && npm run start:watch"
+    depends_on:
+      - ffc-demo-user-postgres
     environment:
-      NODE_ENV: production
-      POSTGRES_PASSWORD:
-      POSTGRES_USERNAME:
-      POSTGRES_HOST:
       POSTGRES_DB: ffc_demo_users
+      POSTGRES_PASSWORD: ppp
+      POSTGRES_USERNAME: postgres
+      POSTGRES_HOST: ffc-demo-user-postgres
       POSTGRES_PORT: 5432
+    networks:
+      - ffc-demo-users
     ports:
       - "3002:3002"
+    volumes:
+      - node_modules:/usr/src/app/node_modules
+      - .:/usr/src/app
 
+  ffc-demo-user-postgres:
+    container_name: ffc-demo-user-postgres
+    image: postgres:11.4-alpine
+    environment:
+      POSTGRES_DB: ffc_demo_users
+      POSTGRES_PASSWORD: ppp
+      POSTGRES_USERNAME: postgres
+    networks:
+      - ffc-demo-users
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+networks:
+  ffc-demo-users: {}
+
+volumes:
+  node_modules: {}
+  postgres_data: {}
