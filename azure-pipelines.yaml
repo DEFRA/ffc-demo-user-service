@@ -132,7 +132,7 @@ steps:
     projectName: $(Build.Repository.Name)
     qualifyImageNames: true
     dockerComposeCommand: run --no-deps --rm $(imageName)
-    dockerComposeFileArgs:
+    dockerComposeFileArgs: |
       POSTGRES_PASSWORD=$(postgresPassword)
       POSTGRES_HOST=$(postgresExternalName)
   displayName: run migration for PR images
