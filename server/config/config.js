@@ -4,7 +4,8 @@ const dbConfig = {
   database: process.env.POSTGRES_DB,
   host: process.env.POSTGRES_HOST,
   port: process.env.POSTGRES_PORT,
-  dialect: 'postgres'
+  dialect: 'postgres',
+  logging: process.env.SEQUELIZE_LOGGING === 'true' ? console.log : false
 }
 
 const config = {
