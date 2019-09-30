@@ -63,7 +63,7 @@ The application is designed to run in containerised environments, using Docker C
 - Scripts are provided to aid local development and testing using Docker Compose.
 - A Helm chart is provided for production deployments to Kubernetes.
 
-## Build container images
+## Build container image
 
 Container images are built using Docker Compose, with the same images used to run the service with either Docker Compose or Kubernetes.
 
@@ -97,11 +97,19 @@ scripts/start -- --detach
 
 ## Test the service
 
-The service binds to a port on the host machine so it can be tested manually by sending HTTP requests to the bound port.
+The service binds to a port on the host machine so it can be tested manually by sending HTTP requests to the bound port using a tool such as [Postman](https://www.getpostman.com) or `curl`.
 
 ```
 # Send a sample request to the /register endpoint
 curl -i --header "Content-Type: application/json" --request POST --data '{ "email": "test@email.com" }' http://localhost:3002/register
+```
+
+Sample valid JSON for the `/register` endpoint is:
+
+```
+{
+  "email": "test@email.com"
+}
 ```
 
 ## Link to sibling services
@@ -126,7 +134,7 @@ scripts/helm/delete
 
 ### Accessing the pod
 
-The ffc-demo-user-service is not exposed via an endpoint within Kubernetes.
+By default, the service is not exposed via an endpoint within Kubernetes.
 
 The deployment may be accessed by forwarding a port from a pod.
 First find the name of the pod by querying the namespace, i.e.
@@ -136,23 +144,9 @@ First find the name of the pod by querying the namespace, i.e.
 This will list the full name of all the pods in the namespace. Forward the pods exposed port 3002
 to a local port using the name returned from the previous command, i.e.
 
-`kubectl port-forward --namespace ffc-demo-user-service-pr2 ffc-demo-user-service-8b666f545-g477t  3002:3002`
+`kubectl port-forward --namespace ffc-demo-user-service-pr2 ffc-demo-user-service-8b666f545-g477t 3002:3002`
 
-Once the port is forwarded a tool such as [Postman](https://www.getpostman.com/) can be used to access the API at http://localhost:3002/register.
-
-Sample valid JSON that can be posted is:
-
-```
-{
-  "email": "test@email.com"
-}
-```
-
-Alternatively, curl can be used to send a request to the end point:
-
-```
-curl -i --header "Content-Type: application/json" --request POST --data '{ "email": "test@email.com" }' http://localhost:3002/register
-```
+Once the port is forwarded, the service can be accessed and tested in the same way as described in the "Test the service" section above.
 
 # Dependency management
 
