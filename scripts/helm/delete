@@ -6,6 +6,8 @@ projectRoot="$(a="/$0"; a=${a%/*}; a=${a:-.}; a=${a#/}/; cd "$a/../.." || return
 (
   cd "${projectRoot}"
 
+  kubectl delete job/ffc-demo-user-service-migration
+
   helm delete --purge \
     ffc-demo-user-postgres \
     ffc-demo-user-service

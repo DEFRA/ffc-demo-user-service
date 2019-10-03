@@ -3,6 +3,9 @@
 set -e
 projectRoot="$(a="/$0"; a=${a%/*}; a=${a:-.}; a=${a#/}/; cd "$a/.." || return; pwd)"
 
+# Set expected prefix for Docker resource names managed by this script
+dockerPrefix="ffc-demo-user"
+
 show_help() {
   echo "
 Stop service containers.
@@ -65,7 +68,7 @@ compose() {
   cd "${projectRoot}"
 
   existingContainers="$( docker-compose ps -q )"
-  existingVolumes="$( docker volume ls --filter name=^ffc-demo-user-service --format={{.Name}} )"
+  existingVolumes="$( docker volume ls --filter name=^${dockerPrefix}-service --format={{.Name}} )"
 
   # Only bring down services if there are existing containers/volumes
   if [ -n "${existingContainers}${existingVolumes}" ]; then
@@ -79,6 +82,7 @@ compose() {
   fi
 
   if [ "${clean}" = "true" ]; then
+    printf "\nPruning Docker images (this may take a while).\n"
     docker image prune -f
   fi
 )

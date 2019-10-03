@@ -6,7 +6,7 @@ projectRoot="$(a="/$0"; a=${a%/*}; a=${a:-.}; a=${a#/}/; cd "$a/../.." || return
 (
   cd "${projectRoot}"
 
-  echo "Deploying user PostgreSQL"
+  echo "Deploying user PostgreSQL."
   helm upgrade \
     --atomic \
     --install \
@@ -20,7 +20,10 @@ projectRoot="$(a="/$0"; a=${a%/*}; a=${a:-.}; a=${a#/}/; cd "$a/../.." || return
     ffc-demo-user-postgres \
     stable/postgresql
 
-  echo "Deploying user service"
+  echo "Migrating database."
+  kubectl apply -f scripts/helm/dev-jobs/migrate.yaml
+
+  echo "Deploying user service."
   helm upgrade \
     --atomic \
     --install \

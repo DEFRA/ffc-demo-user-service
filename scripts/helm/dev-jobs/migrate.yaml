@@ -1,0 +1,29 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ffc-demo-user-service-migration
+spec:
+  backoffLimit: 4
+  template:
+    spec:
+      imagePullSecrets:
+      - name:
+      containers:
+      - name: ffc-demo-user-service-migration
+        image: ffc-demo-user-service
+        command: ["npm",  "run", "migrate"]
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: NODE_ENV
+            value: development
+          - name: POSTGRES_USERNAME
+            value: postgres@mine-support2
+          - name: POSTGRES_PASSWORD
+            value: changeme
+          - name: POSTGRES_DB
+            value: mine_users
+          - name: POSTGRES_HOST
+            value: ffc-demo-user-postgres-postgresql
+          - name: POSTGRES_PORT
+            value: "5432"
+      restartPolicy: Never
