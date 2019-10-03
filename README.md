@@ -140,7 +140,7 @@ Access may be granted by forwarding a local port to the deployed pod:
 
 ```
 # Forward local port to the Kubernetes deployment
-kubectl port-forward deployment/ffc-demo-user-service 3002:3002
+kubectl port-forward --namespace=ffc-demo-user-service deployment/ffc-demo-user-service 3002:3002
 ```
 
 Once the port is forwarded, the service can be accessed and tested in the same way as described in the "Test the service" section above.
