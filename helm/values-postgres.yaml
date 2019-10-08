@@ -1,0 +1,5 @@
+persistence:
+  enabled: false
+postgresqlDatabase: mine_users
+postgresqlPassword: changeme
+postgresqlUsername: postgres@mine-support2

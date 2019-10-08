@@ -6,8 +6,6 @@ spec:
   backoffLimit: 4
   template:
     spec:
-      imagePullSecrets:
-      - name:
       containers:
       - name: ffc-demo-user-service-migration
         image: ffc-demo-user-service
