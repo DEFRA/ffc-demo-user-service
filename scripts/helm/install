@@ -16,7 +16,7 @@ serviceName="ffc-demo-user-service"
     --atomic \
     --install \
     --namespace ${kubernetesNamespace} \
-    --values helm/values-postgres.yaml \
+    --values helm/postgres-values.yaml \
     --wait \
     ${dockerPrefix}-postgres \
     stable/postgresql
@@ -31,7 +31,7 @@ serviceName="ffc-demo-user-service"
     --atomic \
     --install \
     --namespace ${kubernetesNamespace} \
-    --values helm/values-development.yaml \
+    --values helm/development-values.yaml \
     --wait \
     ${serviceName} \
     ./helm
