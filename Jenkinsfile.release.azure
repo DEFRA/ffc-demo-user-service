@@ -1,0 +1,10 @@
+node {
+  stage('Helm install') {
+    print 'Deploying to Azure'
+    withKubeConfig([credentialsId: 'azukubeconfig001']) {
+      sh "helm repo add ffc-demo http://gitlab.ffc.aws-int.defra.cloud/helm/helm-charts/raw/master/"
+      sh "helm repo update"
+      sh "helm upgrade --install --recreate-pods --wait --atomic --namespace azu-ffc-demo ffc-demo-user-service-azure ffc-demo/ffc-demo-user-service"
+    }
+  }
+}
