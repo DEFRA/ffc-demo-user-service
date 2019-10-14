@@ -6,7 +6,6 @@ postgresUsername: postgres@mine-support2
 postgresPassword: changeme
 postgresDatabase: mine_users
 postgresHost: ffc-demo-user-postgres
-postgresServiceName: ffc-demo-user-postgres
 postgresExternalName: host.docker.internal
 postgresPort: 5432
 service:

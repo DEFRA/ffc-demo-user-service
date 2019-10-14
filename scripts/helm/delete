@@ -3,12 +3,19 @@
 set -e
 projectRoot="$(a="/$0"; a=${a%/*}; a=${a:-.}; a=${a#/}/; cd "$a/../.." || return; pwd)"
 
+# Set Docker/Kubernetes resource names managed by this script
+containerName="ffc-demo-user-service"
+dockerPrefix="ffc-demo-user"
+kubernetesNamespace="ffc-demo"
+
 (
   cd "${projectRoot}"
 
-  kubectl delete job/ffc-demo-user-service-migration
+  kubectl delete \
+    --namespace ${kubernetesNamespace} \
+    job/ffc-demo-user-service-migration
 
   helm delete --purge \
-    ffc-demo-user-postgres \
-    ffc-demo-user-service
+    ${dockerPrefix}-postgres \
+    ${containerName}
 )

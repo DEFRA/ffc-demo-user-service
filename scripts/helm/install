@@ -3,34 +3,36 @@
 set -e
 projectRoot="$(a="/$0"; a=${a%/*}; a=${a:-.}; a=${a#/}/; cd "$a/../.." || return; pwd)"
 
+# Set Docker/Kubernetes resource names managed by this script
+dockerPrefix="ffc-demo-user"
+kubernetesNamespace="ffc-demo"
+serviceName="ffc-demo-user-service"
+
 (
   cd "${projectRoot}"
 
-  echo "Deploying user PostgreSQL."
+  echo "Deploying PostgreSQL."
   helm upgrade \
     --atomic \
     --install \
-    --namespace ffc-demo-user-service \
-    --set persistence.enabled=false \
-    --set postgresqlDatabase=mine_users \
-    --set postgresqlPassword=changeme \
-    --set postgresqlUsername=postgres@mine-support2 \
-    --set service.port=5432 \
+    --namespace ${kubernetesNamespace} \
+    --values helm/postgres-values.yaml \
     --wait \
-    ffc-demo-user-postgres \
+    ${dockerPrefix}-postgres \
     stable/postgresql
 
   echo "Migrating database."
-  kubectl apply -f scripts/helm/dev-jobs/migrate.yaml
+  kubectl apply \
+    -f scripts/helm/development-jobs/migrate.yaml \
+    --namespace ${kubernetesNamespace}
 
-  echo "Deploying user service."
+  echo "Deploying service."
   helm upgrade \
     --atomic \
     --install \
-    --namespace ffc-demo-user-service \
-    --set postgresHost=ffc-demo-user-postgres-postgresql \
-    --set postgresServiceName=ffc-demo-user-postgres \
+    --namespace ${kubernetesNamespace} \
+    --values helm/development-values.yaml \
     --wait \
-    ffc-demo-user-service \
+    ${serviceName} \
     ./helm
 )
