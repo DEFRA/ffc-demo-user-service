@@ -32,5 +32,5 @@ projectRoot="$(a="/$0"; a=${a%/*}; a=${a:-.}; a=${a#/}/; cd "$a/../.." || return
     --set postgresServiceName=ffc-demo-user-postgres \
     --wait \
     ffc-demo-user-service \
-    ./helm
+    ./helm/ffc-demo-user-service
 )
