@@ -3,8 +3,8 @@
 set -e
 projectRoot="$(a="/$0"; a=${a%/*}; a=${a:-.}; a=${a#/}/; cd "$a/.." || return; pwd)"
 
-# Set expected prefix for Docker resource names managed by this script
-dockerPrefix="ffc-demo-user"
+# Set Docker/Kubernetes resource names managed by this script
+containerName="ffc-demo-user-test"
 
 show_help() {
   echo "
@@ -53,10 +53,8 @@ done
 compose() {
   (
     cd "${projectRoot}"
-    docker-compose \
-    -f docker-compose.yaml \
-    -f docker-compose.test.yaml \
-    $@
+
+    docker-compose -f docker-compose.test.yaml $@
   )
 }
 
@@ -72,7 +70,7 @@ compose() {
   fi
 
   # Run tests
-  compose run ${dockerPrefix}-test
+  compose run ${containerName}
 
   # Clean up
   compose down --volumes
