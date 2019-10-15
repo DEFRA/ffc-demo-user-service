@@ -163,7 +163,7 @@ steps:
     namespace: $(imageName)-$(safeContainerTag)
     command: upgrade
     chartType: filepath
-    chartPath: helm
+    chartPath: helm/ffc-demo-user-service
     releaseName: $(imageName)-$(containerTag)
     overrideValues: 'postgresExternalName=$(postgresExternalName),postgresPassword=$(postgresPassword)'
     arguments: --set image=$(azureContainerRegistryFull)/$(imageName):$(containerTag) --set container.redeployOnChange=$(Build.BuildId) --set container.imagePullPolicy=Always --atomic
