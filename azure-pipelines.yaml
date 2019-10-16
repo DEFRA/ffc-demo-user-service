@@ -201,7 +201,7 @@ steps:
       helm init -c
       az configure --defaults acr=$(azureContainerRegistry)
       az acr helm repo add
-      helm package ./helm --save
+      helm package ./helm/ffc-demo-user-service --save
       packageFile=`ls elm-rbac-* |  xargs echo`
       az acr helm push --force $packageFile
       az acr helm list
