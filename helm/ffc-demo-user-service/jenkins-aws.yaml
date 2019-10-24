@@ -1,0 +1,6 @@
+environment: production
+name: ffc-demo-user-service
+imagePullSecret: myregistrykey
+container:
+  allowPrivilegeEscalation: true
+  imagePullPolicy: Always
