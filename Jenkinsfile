@@ -1,7 +1,6 @@
 def registry = '562955126301.dkr.ecr.eu-west-2.amazonaws.com'
 def regCredsId = 'ecr:eu-west-2:ecr-user'
 def kubeCredsId = 'awskubeconfig002'
-def ingressServer = "ffc.aws-int.defra.cloud"
 def imageName = 'ffc-demo-user-service'
 def repoName = 'ffc-demo-user-service'
 def repoUrl = ''
@@ -128,8 +127,6 @@ node {
     stage('Run tests') {
       runTests(imageName, BUILD_NUMBER)
     }
-    // note: there should be a `build production image` step here,
-    // but the docker file is currently not set up to create a production only image
     stage('Push container image') {
       pushContainerImage(registry, regCredsId, imageName, containerTag)
     }
