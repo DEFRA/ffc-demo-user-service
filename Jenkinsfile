@@ -22,10 +22,10 @@ def runTests(name, suffix) {
   try {
     sh 'mkdir -p test-output'
     sh 'chmod 777 test-output'
-    sh "docker-compose -p $name-$suffix -f  -f docker-compose.yaml docker-compose.test.yaml run $name"
+    sh "docker-compose -p $name-$suffix -f docker-compose.yaml -f docker-compose.test.yaml run $name"
 
   } finally {
-    sh "docker-compose -p $name-$suffix  -f docker-compose.yaml -f docker-compose.test.yaml down -v"
+    sh "docker-compose -p $name-$suffix -f docker-compose.yaml -f docker-compose.test.yaml down -v"
     junit 'test-output/junit.xml'
     // clean up files created by node/ubuntu user that cannot be deleted by jenkins. Note: uses global environment variable
     sh "docker run --rm -u node --mount type=bind,source='$WORKSPACE/test-output',target=/usr/src/app/test-output $name rm -rf test-output/*"

@@ -85,7 +85,7 @@ steps:
     additionalDockerComposeFiles: docker-compose.test.yaml
     projectName: $(Build.Repository.Name)
     qualifyImageNames: true
-    dockerComposeCommand: run ffc-demo-user-test
+    dockerComposeCommand: run $(imageName)
   displayName: run tests
   # build base image
 - task: DockerCompose@0
