@@ -95,8 +95,8 @@ def buildMigrationImage(imageName, tag) {
   sh "docker tag $imageName:latest $imageName:$tag"
 }
 
-def runMigrationImage(imageName, postgresPassword, postgresExternalName) {
-  sh "docker-compose -f docker-compose.yaml -f docker-compose.migrate.yaml run --no-deps --rm $imageName -e POSTGRES_PASSWORD=$postgresPassword -e POSTGRES_HOST=$postgresExternalName"
+def runMigrationImage(imageName, suffix, postgresPassword, postgresExternalName) {
+  sh "docker-compose -p $imageName-$suffix -f docker-compose.yaml -f docker-compose.migrate.yaml run --no-deps --rm $imageName -e POSTGRES_PASSWORD=$postgresPassword -e POSTGRES_HOST=$postgresExternalName"
 }
 
 def pushMigrationImage(registry, credentialsId, imageName, tag) {
@@ -157,7 +157,7 @@ node {
           usernamePassword(credentialsId: 'postgresUserPR', usernameVariable: 'postgresUsername', passwordVariable: 'postgresPassword'),
         ]) {
           stage('Run Migration image') {
-            runMigrationImage(imageName, postgresPassword, postgresExternalName)
+            runMigrationImage(imageName, BUILD_NUMBER, postgresPassword, postgresExternalName)
           }
           stage('Helm install') {
               def extraCommands = "--values ./helm/ffc-demo-user-service/jenkins-aws.yaml --set postgresExternalName=\"$postgresExternalName\",postgresUsername=\"$postgresUsername\",postgresPassword=\"$postgresPassword\""
