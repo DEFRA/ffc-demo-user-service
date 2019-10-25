@@ -18,13 +18,14 @@ spec:
       annotations:
         redeployOnChange: "{{ .Values.container.redeployOnChange }}"
     spec:
-      restartPolicy: {{ .Values.container.restartPolicy }}
+
       {{- if .Values.imagePullSecret }}
       imagePullSecrets:
       - name: {{ .Values.imagePullSecret }}
       {{- end }}
       initContainers:
         - name:  {{ .Values.name }}-migrate
+          restartPolicy: never
           image: {{ .Values.image }}
           command: ['npm', 'run', 'migrate']
           env:
@@ -51,6 +52,7 @@ spec:
             {{- toYaml . | nindent 12 }}
         {{- end }}
         {{- end }}
+          restartPolicy: {{ .Values.container.restartPolicy }}
           imagePullPolicy: {{ .Values.container.imagePullPolicy }}
           securityContext:
             runAsUser: {{ .Values.container.runAsUser }}
