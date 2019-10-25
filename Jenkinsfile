@@ -90,8 +90,8 @@ def undeployPR(credentialsId, imageName, tag) {
   }
 }
 
-def buildMigrationImage(imageName, tag) {
-  sh "docker-compose -f docker-compose.yaml -f docker-compose.migrate.yaml build"
+def buildMigrationImage(imageName, suffix, tag) {
+  sh "docker-compose -p $imageName-$suffix -f docker-compose.yaml -f docker-compose.migrate.yaml build"
   sh "docker tag $imageName:latest $imageName:$tag"
 }
 
@@ -149,7 +149,7 @@ node {
       pushContainerImage(registry, regCredsId, imageName, containerTag)
     }
     stage('Build Migration image') {
-      buildMigrationImage(imageName, containerMigrateTag)
+      buildMigrationImage(imageName, BUILD_NUMBER, containerMigrateTag)
     }
     if (pr != '') {
       withCredentials([
