@@ -1,0 +1,22 @@
+version: '3.4'
+services:
+  ffc-demo-user-service:
+    networks:
+      - ffc-demo-users
+    ports:
+      - "3002:3002"
+    volumes:
+      - node_modules:/usr/src/app/node_modules
+      - .:/usr/src/app
+
+  ffc-demo-user-postgres:
+    networks:
+      - ffc-demo-users
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+networks:
+  ffc-demo-users: {}
+
+volumes:
+  postgres_data: {}
