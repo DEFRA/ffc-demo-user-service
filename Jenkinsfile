@@ -3,6 +3,7 @@ def regCredsId = 'ecr:eu-west-2:ecr-user'
 def kubeCredsId = 'awskubeconfig002'
 def imageName = 'ffc-demo-user-service'
 def repoName = 'ffc-demo-user-service'
+def databasename = 'mine_users'
 def repoUrl = ''
 def commitSha = ''
 def branch = ''
@@ -95,8 +96,8 @@ def buildMigrationImage(imageName, suffix, tag) {
   sh "docker tag $imageName:latest $imageName:$tag"
 }
 
-def runMigrationImage(imageName, suffix, postgresPassword, postgresExternalName) {
-  sh "docker-compose -p $imageName-$suffix -f docker-compose.yaml -f docker-compose.migrate.yaml run --no-deps --rm -e POSTGRES_PASSWORD=$postgresPassword -e POSTGRES_HOST=$postgresExternalName $imageName"
+def runMigrationImage(imageName, suffix, databasename, postgresUsername, postgresPassword, postgresExternalName) {
+  sh "docker-compose -p $imageName-$suffix -f docker-compose.yaml -f docker-compose.migrate.yaml run --no-deps --rm -e POSTGRES_PASSWORD=$postgresPassword -e POSTGRES_HOST=$postgresExternalName -e POSTGRES_USERNAME=$postgresUsername -e POSTGRES_DB=$databasename $imageName"
 }
 
 def pushMigrationImage(registry, credentialsId, imageName, tag) {
@@ -154,10 +155,11 @@ node {
     if (pr != '') {
       withCredentials([
           string(credentialsId: 'postgresExternalNameUserPR', variable: 'postgresExternalName'),
+          string(credentialsId: 'postgresDatabaseUsersPR', variable: 'databasename'),
           usernamePassword(credentialsId: 'postgresUserPR', usernameVariable: 'postgresUsername', passwordVariable: 'postgresPassword'),
         ]) {
           stage('Run Migration image') {
-            runMigrationImage(imageName, BUILD_NUMBER, postgresPassword, postgresExternalName)
+            runMigrationImage(imageName, BUILD_NUMBER, databasename, postgresUsername, postgresPassword, postgresExternalName)
           }
           stage('Helm install') {
               def extraCommands = "--values ./helm/ffc-demo-user-service/jenkins-aws.yaml --set postgresExternalName=\"$postgresExternalName\",postgresUsername=\"$postgresUsername\",postgresPassword=\"$postgresPassword\""
