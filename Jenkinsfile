@@ -96,7 +96,7 @@ def buildMigrationImage(imageName, suffix, tag) {
 }
 
 def runMigrationImage(imageName, suffix, postgresPassword, postgresExternalName) {
-  sh "docker-compose -p $imageName-$suffix -f docker-compose.yaml -f docker-compose.migrate.yaml run --no-deps --rm $imageName -e POSTGRES_PASSWORD=$postgresPassword -e POSTGRES_HOST=$postgresExternalName"
+  sh "docker-compose -p $imageName-$suffix -f docker-compose.yaml -f docker-compose.migrate.yaml run --no-deps --rm -e POSTGRES_PASSWORD=$postgresPassword -e POSTGRES_HOST=$postgresExternalName $imageName"
 }
 
 def pushMigrationImage(registry, credentialsId, imageName, tag) {
