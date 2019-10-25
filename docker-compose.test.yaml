@@ -13,4 +13,4 @@ services:
       - ./test-output:/usr/src/app/test-output
 
   ffc-demo-user-postgres:
-    container_name: ffc-demo-user-postgres-test
+    container_name: ffc-demo-user-postgres-test${BUILD_NUMBER:-local}
