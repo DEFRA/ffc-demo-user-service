@@ -9,6 +9,7 @@ def branch = ''
 def pr = ''
 def mergedPrNo = ''
 def containerTag = ''
+def containerMigrateTag = ''
 
 def getMergedPrNo() {
     def mergedPrNo = sh(returnStdout: true, script: "git log --pretty=oneline --abbrev-commit -1 | sed -n 's/.*(#\\([0-9]\\+\\)).*/\\1/p'").trim()
@@ -30,7 +31,8 @@ def getVariables(repoName) {
     def pr = sh(returnStdout: true, script: "curl https://api.github.com/repos/DEFRA/$repoName/pulls?state=open | jq '.[] | select(.head.ref == \"$branch\") | .number'").trim()
     def rawTag = pr == '' ? branch : "pr$pr"
     def containerTag = rawTag.replaceAll(/[^a-zA-Z0-9]/, '-').toLowerCase()
-    return [branch, pr, containerTag,  getMergedPrNo(), getRepoURL(), getCommitSha()]
+    def containerMigrateTag = "$containerTag-migrate"
+    return [branch, pr, containerTag, containerMigrateTag, getMergedPrNo(), getRepoURL(), getCommitSha()]
 }
 
 def updateGithubCommitStatus(message, state, repoUrl, commitSha) {
@@ -88,6 +90,22 @@ def undeployPR(credentialsId, imageName, tag) {
   }
 }
 
+def buildMigrationImage(imageName, tag) {
+  sh "docker-compose -f docker-compose.yaml -f docker-compose.migrate.yaml build"
+  sh "docker tag $imageName:latest $imageName:$tag"
+}
+
+def runMigrationImage(imageName, postgresPassword, postgresExternalName) {
+  sh "docker-compose -f docker-compose.yaml -f docker-compose.migrate.yaml run --no-deps --rm $imageName -e POSTGRES_PASSWORD=$postgresPassword -e POSTGRES_HOST=$postgresExternalName"
+}
+
+def pushMigrationImage(registry, credentialsId, imageName, tag) {
+  docker.withRegistry("https://$registry", credentialsId) {
+    sh "docker tag $imageName:$tag $registry/$imageName:$tag"
+    sh "docker push $registry/$imageName:$tag"
+  }
+}
+
 def publishChart(imageName) {
   // jenkins doesn't tidy up folder, remove old charts before running
   sh "rm -rf helm-charts"
@@ -110,7 +128,7 @@ node {
   checkout scm
   try {
     stage('Set branch, PR, and containerTag variables') {
-      (branch, pr, containerTag, mergedPrNo, repoUrl, commitSha) = getVariables(repoName)
+      (branch, pr, containerTag, containerMigrateTag, mergedPrNo, repoUrl, commitSha) = getVariables(repoName)
       if (pr) {
         sh "echo Building $pr"
       } else if (branch == "master") {
@@ -130,16 +148,26 @@ node {
     stage('Push container image') {
       pushContainerImage(registry, regCredsId, imageName, containerTag)
     }
+    stage('Build Migration image') {
+      buildMigrationImage(imageName, containerMigrateTag)
+    }
     if (pr != '') {
-      stage('Helm install') {
-        withCredentials([
-            string(credentialsId: 'postgresExternalNameUserPR', variable: 'postgresExternalName'),
-            usernamePassword(credentialsId: 'postgresUserPR', usernameVariable: 'postgresUsername', passwordVariable: 'postgresPassword'),
-          ]) {
-          def extraCommands = "--values ./helm/ffc-demo-user-service/jenkins-aws.yaml --set postgresExternalName=\"$postgresExternalName\",postgresUsername=\"$postgresUsername\",postgresPassword=\"$postgresPassword\""
-          deployPR(kubeCredsId, registry, imageName, containerTag, extraCommands)
-        }
+      withCredentials([
+          string(credentialsId: 'postgresExternalNameUserPR', variable: 'postgresExternalName'),
+          usernamePassword(credentialsId: 'postgresUserPR', usernameVariable: 'postgresUsername', passwordVariable: 'postgresPassword'),
+        ]) {
+          stage('Run Migration image') {
+            runMigrationImage(imageName, postgresPassword, postgresExternalName)
+          }
+          stage('Helm install') {
+              def extraCommands = "--values ./helm/ffc-demo-user-service/jenkins-aws.yaml --set postgresExternalName=\"$postgresExternalName\",postgresUsername=\"$postgresUsername\",postgresPassword=\"$postgresPassword\""
+              deployPR(kubeCredsId, registry, imageName, containerTag, extraCommands)
+          }
       }
+
+    }
+    stage('Push Migration image') {
+      pushMigrationImage(registry, credentialsId, imageName, containerMigrateTag)
     }
     if (pr == '') {
       stage('Publish chart') {
