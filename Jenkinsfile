@@ -3,14 +3,12 @@ def regCredsId = 'ecr:eu-west-2:ecr-user'
 def kubeCredsId = 'awskubeconfig002'
 def imageName = 'ffc-demo-user-service'
 def repoName = 'ffc-demo-user-service'
-def databasename = 'mine_users'
 def repoUrl = ''
 def commitSha = ''
 def branch = ''
 def pr = ''
 def mergedPrNo = ''
 def containerTag = ''
-def containerMigrateTag = ''
 
 def getMergedPrNo() {
     def mergedPrNo = sh(returnStdout: true, script: "git log --pretty=oneline --abbrev-commit -1 | sed -n 's/.*(#\\([0-9]\\+\\)).*/\\1/p'").trim()
@@ -32,8 +30,7 @@ def getVariables(repoName) {
     def pr = sh(returnStdout: true, script: "curl https://api.github.com/repos/DEFRA/$repoName/pulls?state=open | jq '.[] | select(.head.ref == \"$branch\") | .number'").trim()
     def rawTag = pr == '' ? branch : "pr$pr"
     def containerTag = rawTag.replaceAll(/[^a-zA-Z0-9]/, '-').toLowerCase()
-    def containerMigrateTag = "$containerTag-migrate"
-    return [branch, pr, containerTag, containerMigrateTag, getMergedPrNo(), getRepoURL(), getCommitSha()]
+    return [branch, pr, containerTag,  getMergedPrNo(), getRepoURL(), getCommitSha()]
 }
 
 def updateGithubCommitStatus(message, state, repoUrl, commitSha) {
@@ -91,22 +88,6 @@ def undeployPR(credentialsId, imageName, tag) {
   }
 }
 
-def buildMigrationImage(imageName, suffix, tag) {
-  sh "docker-compose -p $imageName-$suffix -f docker-compose.yaml -f docker-compose.migrate.yaml build"
-  sh "docker tag $imageName:latest $imageName:$tag"
-}
-
-def runMigrationImage(imageName, suffix, databasename, postgresUsername, postgresPassword, postgresExternalName) {
-  sh "docker-compose -p $imageName-$suffix -f docker-compose.yaml -f docker-compose.migrate.yaml run --no-deps --rm -e POSTGRES_PASSWORD=$postgresPassword -e POSTGRES_HOST=$postgresExternalName -e POSTGRES_USERNAME=$postgresUsername -e POSTGRES_DB=$databasename $imageName"
-}
-
-def pushMigrationImage(registry, credentialsId, imageName, tag) {
-  docker.withRegistry("https://$registry", credentialsId) {
-    sh "docker tag $imageName:$tag $registry/$imageName:$tag"
-    sh "docker push $registry/$imageName:$tag"
-  }
-}
-
 def publishChart(imageName) {
   // jenkins doesn't tidy up folder, remove old charts before running
   sh "rm -rf helm-charts"
@@ -129,7 +110,7 @@ node {
   checkout scm
   try {
     stage('Set branch, PR, and containerTag variables') {
-      (branch, pr, containerTag, containerMigrateTag, mergedPrNo, repoUrl, commitSha) = getVariables(repoName)
+      (branch, pr, containerTag, mergedPrNo, repoUrl, commitSha) = getVariables(repoName)
       if (pr) {
         sh "echo Building $pr"
       } else if (branch == "master") {
@@ -149,27 +130,16 @@ node {
     stage('Push container image') {
       pushContainerImage(registry, regCredsId, imageName, containerTag)
     }
-    stage('Build Migration image') {
-      buildMigrationImage(imageName, BUILD_NUMBER, containerMigrateTag)
-    }
     if (pr != '') {
-      withCredentials([
-          string(credentialsId: 'postgresExternalNameUserPR', variable: 'postgresExternalName'),
-          string(credentialsId: 'postgresDatabaseUsersPR', variable: 'databasename'),
-          usernamePassword(credentialsId: 'postgresUserPR', usernameVariable: 'postgresUsername', passwordVariable: 'postgresPassword'),
-        ]) {
-          stage('Run Migration image') {
-            runMigrationImage(imageName, BUILD_NUMBER, databasename, postgresUsername, postgresPassword, postgresExternalName)
-          }
-          stage('Helm install') {
-              def extraCommands = "--values ./helm/ffc-demo-user-service/jenkins-aws.yaml --set postgresExternalName=\"$postgresExternalName\",postgresUsername=\"$postgresUsername\",postgresPassword=\"$postgresPassword\""
-              deployPR(kubeCredsId, registry, imageName, containerTag, extraCommands)
-          }
+      stage('Helm install') {
+        withCredentials([
+            string(credentialsId: 'postgresExternalNameUserPR', variable: 'postgresExternalName'),
+            usernamePassword(credentialsId: 'postgresUserPR', usernameVariable: 'postgresUsername', passwordVariable: 'postgresPassword'),
+          ]) {
+          def extraCommands = "--values ./helm/ffc-demo-user-service/jenkins-aws.yaml --set postgresExternalName=\"$postgresExternalName\",postgresUsername=\"$postgresUsername\",postgresPassword=\"$postgresPassword\""
+          deployPR(kubeCredsId, registry, imageName, containerTag, extraCommands)
+        }
       }
-
-    }
-    stage('Push Migration image') {
-      pushMigrationImage(registry, credentialsId, imageName, containerMigrateTag)
     }
     if (pr == '') {
       stage('Publish chart') {
