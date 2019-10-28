@@ -23,6 +23,21 @@ spec:
       imagePullSecrets:
       - name: {{ .Values.imagePullSecret }}
       {{- end }}
+      initContainers:
+        - name:  {{ .Values.name }}-migrate
+          image: {{ .Values.image }}
+          command: ['npm', 'run', 'migrate']
+          env:
+            - name: POSTGRES_USERNAME
+              value: {{ .Values.postgresUsername }}
+            - name: POSTGRES_PASSWORD
+              value: {{ .Values.postgresPassword }}
+            - name: POSTGRES_DB
+              value: {{ .Values.postgresDatabase }}
+            - name: POSTGRES_HOST
+              value: {{ .Values.postgresHost }}
+            - name: POSTGRES_PORT
+              value: {{ .Values.postgresPort | quote }}
       containers:
         - name: {{ .Values.name }}
           image: {{ .Values.image }}
