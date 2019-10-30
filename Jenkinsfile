@@ -109,7 +109,7 @@ def publishChart(imageName) {
 }
 
 def triggerDeploy(jenkinsUrl, jobName, token, params) {
-  def url = "$jenkinsUrl/job/$jobname/buildWithParameters?token=$token"
+  def url = "$jenkinsUrl/job/$jobName/buildWithParameters?token=$token"
   params.each { param ->
     url = url + "&amp;$param.key=$param.value"
   }
