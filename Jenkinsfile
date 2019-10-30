@@ -113,7 +113,7 @@ def triggerDeploy(jenkinsUrl, jobName, token, params) {
   params.each { param ->
     url = url + "&amp;$param.key=$param.value"
   }
-  println $url
+  println "$url"
 }
 
 node {
