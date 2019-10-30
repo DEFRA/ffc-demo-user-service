@@ -3,6 +3,7 @@ def regCredsId = 'ecr:eu-west-2:ecr-user'
 def kubeCredsId = 'awskubeconfig002'
 def imageName = 'ffc-demo-user-service'
 def repoName = 'ffc-demo-user-service'
+def deployUrl = 'https://jenkins.ffc.aws-int.defra.cloud/job/ffc-demo-web-deploy/buildWithParameters?token=defra&amp;chartVersion=1234'
 def repoUrl = ''
 def commitSha = ''
 def branch = ''
@@ -106,6 +107,15 @@ def publishChart(imageName) {
     }
   }
 }
+
+def triggerDeploy(jenkinsUrl, jobName, token, params) {
+  def url = "$jenkinsUrl/job/$jobname/buildWithParameters?token=$token"
+  params.each { param ->
+    url = url + "&amp;$param.key=$param.value"
+  }
+  println $url
+}
+
 node {
   checkout scm
   try {
@@ -146,6 +156,10 @@ node {
         publishChart(imageName)
       }
     }
+    // Put this stage in the if(pr=='') to only run when master merge occurs
+      stage('Trigger Deployment') {
+        triggerDeploy('https://jenkins.ffc.aws-int.defra.cloud', 'ffc-demo-user-service-deploy', 'defra', ['chartVersion':'1.0.0'])
+      }
     if (mergedPrNo != '') {
       stage('Remove merged PR') {
         sh "echo removing deployment for PR $mergedPrNo"
