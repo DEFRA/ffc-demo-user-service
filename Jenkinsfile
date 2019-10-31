@@ -113,7 +113,8 @@ def triggerDeploy(jenkinsUrl, jobName, token, params) {
   params.each { param ->
     url = url + "&amp;$param.key=$param.value"
   }
-  sh "curl -k $url"
+  println "Triggering deployment for $url"
+  sh $/curl -k $url/$
 }
 
 node {
