@@ -159,7 +159,11 @@ node {
     }
     // Put this stage in the if(pr=='') to only run when master merge occurs
       stage('Trigger Deployment') {
-        triggerDeploy('https://jenkins.ffc.aws-int.defra.cloud', 'ffc-demo-user-service-deploy', 'defra', ['chartVersion':'1.0.0'])
+        withCredentials([
+          string(credentialsId: 'JenkinsDeployUrl', variable: 'JenkinsDeployUrl')
+        ]) {
+          triggerDeploy(JenkinsDeployUrl, 'ffc-demo-user-service-deploy', 'defra', ['chartVersion':'1.0.0'])
+        }
       }
     if (mergedPrNo != '') {
       stage('Remove merged PR') {
