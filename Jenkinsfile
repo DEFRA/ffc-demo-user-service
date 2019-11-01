@@ -117,7 +117,7 @@ def triggerDeploy(jenkinsUrl, jobName, token, params) {
   // params is an object, that should contain all the parameters that need to be passed to the job (if required), for example ['version': '1.0.0']
   def url = "$jenkinsUrl/job/$jobName/buildWithParameters?token=$token"
   params.each { param ->
-    url = url + "\&amp;$param.key=$param.value"
+    url = url + "\\&amp;$param.key=$param.value"
   }
   println "Triggering deployment for $url"
   sh(script: "curl -k $url")
