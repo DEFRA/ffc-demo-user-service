@@ -110,7 +110,7 @@ def publishChart(imageName) {
 
 def triggerDeploy(jenkinsUrl, jobName, token, params) {
   // jenkinsUrl is the full url (without trailing /) of the jenkins service, including username and access token
-  // e.g. https://deploy:11b6b6c27bab322eda6f6d3b2132ba62f9@jenkins.ffc.aws-int.defra.cloud
+  // e.g. https://deploy:accesstoken@jenkins.ffc.aws-int.defra.cloud
   // jobName is the jenkins job name, this is in the url when you edit or view the job in Jenkins
   // token is the token that is set up when you configured the job in Jenkins. You must tick the "Trigger builds remotely" option when configuring the job. The Authentication token entered
   //    into the job is the one that should be passed here.
