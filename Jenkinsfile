@@ -109,9 +109,15 @@ def publishChart(imageName) {
 }
 
 def triggerDeploy(jenkinsUrl, jobName, token, params) {
+  // jenkinsUrl is the full url (without trailing /) of the jenkins service, including username and access token
+  // e.g. https://deploy:11b6b6c27bab322eda6f6d3b2132ba62f9@jenkins.ffc.aws-int.defra.cloud
+  // jobName is the jenkins job name, this is in the url when you edit or view the job in Jenkins
+  // token is the token that is set up when you configured the job in Jenkins. You must tick the "Trigger builds remotely" option when configuring the job. The Authentication token entered
+  //    into the job is the one that should be passed here.
+  // params is an object, that should contain all the parameters that need to be passed to the job (if required), for example ['version': '1.0.0']
   def url = "$jenkinsUrl/job/$jobName/buildWithParameters?token=$token"
   params.each { param ->
-    url = url + "&amp;$param.key=$param.value"
+    url = url + "\&amp;$param.key=$param.value"
   }
   println "Triggering deployment for $url"
   sh(script: "curl -k $url")
@@ -160,9 +166,10 @@ node {
     // Put this stage in the if(pr=='') to only run when master merge occurs
       stage('Trigger Deployment') {
         withCredentials([
-          string(credentialsId: 'JenkinsDeployUrl', variable: 'JenkinsDeployUrl')
+          string(credentialsId: 'JenkinsDeployUrl', variable: 'JenkinsDeployUrl'),
+          string(credentialsId: 'ffc-demo-user-service-deploy-token', variable: 'JenkinsToken')
         ]) {
-          triggerDeploy(JenkinsDeployUrl, 'ffc-demo-user-service-deploy', 'defra', ['chartVersion':'1.0.0'])
+          triggerDeploy(JenkinsDeployUrl, 'ffc-demo-user-service-deploy', JenkinsToken, ['chartVersion':'1.0.0'])
         }
       }
     if (mergedPrNo != '') {
