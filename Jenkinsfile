@@ -162,8 +162,6 @@ node {
       stage('Publish chart') {
         publishChart(imageName)
       }
-    }
-    // Put this stage in the if(pr=='') to only run when master merge occurs
       stage('Trigger Deployment') {
         withCredentials([
           string(credentialsId: 'JenkinsDeployUrl', variable: 'JenkinsDeployUrl'),
@@ -172,6 +170,7 @@ node {
           triggerDeploy(JenkinsDeployUrl, 'ffc-demo-user-service-deploy', JenkinsToken, ['chartVersion':'1.0.0'])
         }
       }
+    }
     if (mergedPrNo != '') {
       stage('Remove merged PR') {
         sh "echo removing deployment for PR $mergedPrNo"
