@@ -9,12 +9,7 @@ services:
       - "3002:3002"
     networks:
       - ffc-demo
-  ffc-demo-user-postgres:
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+
 networks:
   ffc-demo:
    external: true
-
-volumes:
-  postgres_data: {}
