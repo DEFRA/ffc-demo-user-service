@@ -6,11 +6,7 @@ version: '3.4'
 services:
   ffc-demo-user-service:
     command: sh -c "scripts/wait-for/wait-for ffc-demo-user-postgres:5432 -- npm run migrate && npm run test"
-    container_name: ffc-demo-user-test-${CONTAINER_TAG:-dev}-${BUILD_NUMBER:-local}
     environment:
       NODE_ENV: test
     volumes:
       - ./test-output:/usr/src/app/test-output
-
-  ffc-demo-user-postgres:
-    container_name: ffc-demo-user-postgres-test-${CONTAINER_TAG:-dev}-${BUILD_NUMBER:-local}

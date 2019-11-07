@@ -3,7 +3,6 @@ services:
   ffc-demo-user-service:
     build: .
     image: ffc-demo-user-service
-    container_name: ffc-demo-user-service-${CONTAINER_TAG:-dev}-${BUILD_NUMBER:-local}
     command: sh -c "scripts/wait-for/wait-for ffc-demo-user-postgres:5432 -- npm run migrate && npm run start:watch"
     depends_on:
       - ffc-demo-user-postgres
@@ -20,7 +19,6 @@ services:
       - ffc-demo-users
 
   ffc-demo-user-postgres:
-    container_name: ffc-demo-user-postgres-${CONTAINER_TAG:-dev}-${BUILD_NUMBER:-local}
     image: postgres:11.4-alpine
     environment:
       POSTGRES_DB: ffc_demo_users
