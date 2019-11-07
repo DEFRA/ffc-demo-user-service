@@ -5,6 +5,8 @@ version: '3.4'
 
 services:
   ffc-demo-user-service:
+    ports:
+      - "3002:3002"
     networks:
       - ffc-demo
 

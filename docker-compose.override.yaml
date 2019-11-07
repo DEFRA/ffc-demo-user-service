@@ -1,0 +1,8 @@
+version: '3.4'
+services:
+  ffc-demo-user-service:
+    ports:
+      - "3002:3002"
+    volumes:
+      - node_modules:/usr/src/app/node_modules
+      - .:/usr/src/app

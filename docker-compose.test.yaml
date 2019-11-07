@@ -4,42 +4,7 @@ version: '3.4'
 # that test output is saved to the host
 
 services:
-  ffc-demo-user-test:
-    build: .
-    command: sh -c "scripts/wait-for/wait-for ffc-demo-user-test-postgres:5432 -- npm run migrate && npm run test"
-    image: ffc-demo-user-test
-    container_name: ffc-demo-user-test
-    depends_on:
-      - ffc-demo-user-test-postgres
+  ffc-demo-user-service:
+    command: sh -c "scripts/wait-for/wait-for ffc-demo-user-postgres:5432 -- npm run migrate && npm run test"
     environment:
       NODE_ENV: test
-      POSTGRES_DB: ffc_demo_users_test
-      POSTGRES_PASSWORD: ppp
-      POSTGRES_USERNAME: postgres
-      POSTGRES_HOST: ffc-demo-user-test-postgres
-      POSTGRES_PORT: 5432
-    volumes:
-      - test_node_modules:/usr/src/app/node_modules
-      - .:/usr/src/app
-      - ./test-output:/usr/src/app/test-output
-    networks:
-      - ffc-demo-user-test
-
-  ffc-demo-user-test-postgres:
-    container_name: ffc-demo-user-test-postgres
-    image: postgres:11.4-alpine
-    environment:
-      POSTGRES_DB: ffc_demo_users_test
-      POSTGRES_PASSWORD: ppp
-      POSTGRES_USERNAME: postgres
-    volumes:
-      - test_user_postgres_data:/var/lib/postgresql/data
-    networks:
-      - ffc-demo-user-test
-
-networks:
-  ffc-demo-user-test: {}
-
-volumes:
-  test_user_postgres_data: {}
-  test_node_modules: {}
