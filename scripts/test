@@ -3,6 +3,9 @@
 set -e
 projectRoot="$(a="/$0"; a=${a%/*}; a=${a:-.}; a=${a#/}/; cd "$a/.." || return; pwd)"
 
+# Set Docker/Kubernetes resource names managed by this script	
+containerName="ffc-demo-user-service"
+
 show_help() {
   echo "
 Run automated tests.
@@ -51,7 +54,7 @@ compose() {
   (
     cd "${projectRoot}"
 
-    docker-compose -p ffc-demo-user-service-test -f docker-compose.yaml -f docker-compose.test.yaml $@
+    docker-compose -p ${containerName}-test -f docker-compose.yaml -f docker-compose.test.yaml $@
   )
 }
 

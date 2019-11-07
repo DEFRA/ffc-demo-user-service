@@ -8,5 +8,3 @@ services:
     command: sh -c "scripts/wait-for/wait-for ffc-demo-user-postgres:5432 -- npm run migrate && npm run test"
     environment:
       NODE_ENV: test
-    volumes:
-      - ./test-output:/usr/src/app/test-output

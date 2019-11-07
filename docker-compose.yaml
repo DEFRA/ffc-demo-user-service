@@ -12,11 +12,11 @@ services:
       POSTGRES_USERNAME: postgres
       POSTGRES_HOST: ffc-demo-user-postgres
       POSTGRES_PORT: 5432
+    networks:
+      - ffc-demo-users
     volumes:
       - node_modules:/usr/src/app/node_modules
       - .:/usr/src/app
-    networks:
-      - ffc-demo-users
 
   ffc-demo-user-postgres:
     image: postgres:11.4-alpine
