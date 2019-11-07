@@ -14,17 +14,17 @@ def containerTag = ''
 def buildTestImage(name, suffix) {
   sh 'docker image prune -f || echo could not prune images'
   // NOTE: the docker-compose file currently makes use of global $BUILD_NUMBER env vars fo image names
-  sh "docker-compose -p $name-$suffix-$containerTag -f docker-compose.yaml -f docker-compose.test.yaml build --no-cache $name"
+  sh "docker-compose -p $name-$suffix-${env.CONTAINER_TAG} -f docker-compose.yaml -f docker-compose.test.yaml build --no-cache $name"
 }
 
 def runTests(name, suffix) {
   try {
     sh 'mkdir -p test-output'
     sh 'chmod 777 test-output'
-    sh "docker-compose -p $name-$suffix-$containerTag -f docker-compose.yaml -f docker-compose.test.yaml up $name"
+    sh "docker-compose -p $name-$suffix-${env.CONTAINER_TAG} -f docker-compose.yaml -f docker-compose.test.yaml up $name"
 
   } finally {
-    sh "docker-compose -p  $name-$suffix-$containerTag -f docker-compose.yaml -f docker-compose.test.yaml down -v"
+    sh "docker-compose -p  $name-$suffix-${env.CONTAINER_TAG} -f docker-compose.yaml -f docker-compose.test.yaml down -v"
     junit 'test-output/junit.xml'
     // clean up files created by node/ubuntu user that cannot be deleted by jenkins. Note: uses global environment variable
     sh "docker run --rm -u node --mount type=bind,source='$WORKSPACE/test-output',target=/usr/src/app/test-output $name rm -rf test-output/*"
