@@ -1,6 +1,0 @@
-    
-#!/bin/bash
-docker-compose -p ffc-demo-user-service-test -f docker-compose.yaml -f docker-compose.test.yaml build --no-cache ffc-demo-user-service
-docker-compose -p ffc-demo-user-service-test -f docker-compose.yaml -f docker-compose.test.yaml up --force-recreate ffc-demo-user-service
-docker-compose -p ffc-demo-user-service-test -f docker-compose.yaml -f docker-compose.test.yaml down
- 
