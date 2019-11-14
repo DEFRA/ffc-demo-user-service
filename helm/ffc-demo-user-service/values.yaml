@@ -5,7 +5,11 @@ imagePullSecret:
 postgresUsername: postgres@mine-support2
 postgresPassword: changeme
 postgresDatabase: mine_users
+# postgresHost is the host name of the PostgreSQL service
 postgresHost: ffc-demo-user-postgres
+# postgresExternalName is the external host name to which PostgreSQL
+# requests should be forwarded. If empty, PostgreSQL is assumed to be
+# within the cluster and accessible via postgresHost
 postgresExternalName: host.docker.internal
 postgresPort: 5432
 service:
