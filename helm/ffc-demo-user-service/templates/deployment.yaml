@@ -37,7 +37,7 @@ spec:
             - name: POSTGRES_HOST
               value: {{ quote .Values.postgresHost }}
             - name: POSTGRES_PORT
-              value: {{ quote .Values.postgresPort }}
+              value: {{ .Values.postgresPort }}
       containers:
         - name: {{ quote .Values.name }}
           image: {{ quote .Values.image }}
