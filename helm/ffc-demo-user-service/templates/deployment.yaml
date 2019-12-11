@@ -16,15 +16,15 @@ spec:
         app: {{ quote .Values.name }}
         environment: {{ quote .Values.environment }}
       annotations:
-        redeployOnChange: "{{ .Values.container.redeployOnChange }}"
+        redeployOnChange: {{ quote .Values.container.redeployOnChange }}
     spec:
-      restartPolicy: {{ .Values.container.restartPolicy }}
+      restartPolicy: {{ quote .Values.container.restartPolicy }}
       {{- if .Values.imagePullSecret }}
       imagePullSecrets:
-      - name: {{ .Values.imagePullSecret }}
+      - name: {{ quote .Values.imagePullSecret }}
       {{- end }}
       initContainers:
-        - name:  {{ quote .Values.name }}-migrate
+        - name:  "{{ .Values.name }}-migrate"
           image: {{ quote .Values.image }}
           command: ['npm', 'run', 'migrate']
           env:
