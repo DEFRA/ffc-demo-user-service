@@ -21,7 +21,7 @@ spec:
       restartPolicy: {{ quote .Values.container.restartPolicy }}
       {{- if .Values.imagePullSecret }}
       imagePullSecrets:
-      - name: {{ quote .Values.imagePullSecret }}
+      - name: {{ .Values.imagePullSecret }}
       {{- end }}
       initContainers:
         - name:  {{ quote .Values.name }}-migrate
