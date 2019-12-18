@@ -1,4 +1,4 @@
-@Library('defra-library@0.0.6')
+@Library('defra-library@separate-test-cleanup')
 import uk.gov.defra.ffc.DefraUtils
 def defraUtils = new DefraUtils()
 
@@ -29,6 +29,7 @@ node {
     }
     stage('Run tests') {
       defraUtils.runTests(imageName, BUILD_NUMBER)
+      defraUtils.deleteTestOutput(imageName)
     }
     stage('SonarQube analysis') {
       defraUtils.analyseCode(sonarQubeEnv, sonarScanner, ['sonar.projectKey' : repoName, 'sonar.sources' : '.'])
