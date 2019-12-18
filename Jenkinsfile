@@ -29,7 +29,6 @@ node {
     }
     stage('Run tests') {
       defraUtils.runTests(imageName, BUILD_NUMBER)
-      defraUtils.deleteTestOutput(imageName)
     }
     stage('SonarQube analysis') {
       defraUtils.analyseCode(sonarQubeEnv, sonarScanner, ['sonar.projectKey' : repoName, 'sonar.sources' : '.'])
@@ -73,5 +72,7 @@ node {
   } catch(e) {
     defraUtils.setGithubStatusFailure(e.message)
     throw e
+  } finally {
+      defraUtils.deleteTestOutput(imageName)    
   }
 }
