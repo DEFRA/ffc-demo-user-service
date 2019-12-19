@@ -17,10 +17,6 @@ def localSrcFolder = '.'
 def lcovFile = './test-output/lcov.info'
 def timeoutInMinutes = 5
 
-def replaceInFile(from, to, file) {
-  sh "sed -i -e 's/$from/$to/g' $file"  
-}
-
 node {
   checkout scm
   try {
@@ -38,7 +34,7 @@ node {
       defraUtils.runTests(imageName, BUILD_NUMBER)
     }
     stage('Fix absolute paths in lcov file') {
-      replaceInFile(containerSrcFolder, localSrcFolder, lcovFile)
+      defraUtils.replaceInFile(containerSrcFolder, localSrcFolder, lcovFile)
     }
     stage('SonarQube analysis') {
       defraUtils.analyseCode(sonarQubeEnv, sonarScanner, ['sonar.projectKey' : repoName, 'sonar.sources' : '.'])
