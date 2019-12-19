@@ -14,6 +14,10 @@ def sonarQubeEnv = 'SonarQube'
 def sonarScanner = 'SonarScanner'
 def timeoutInMinutes = 5
 
+def replaceInFile(from, to, file) {
+  sh "sed -i -e 's/$from/$to/g' $file"  
+}
+
 node {
   checkout scm
   try {
@@ -31,7 +35,7 @@ node {
       defraUtils.runTests(imageName, BUILD_NUMBER)
     }
     stage('SonarQube analysis') {
-      sh "sed -i -e 's/\\/usr\\/src\\/app/./g' ./test-output/lcov.info"
+      replaceInFile('/usr/src/app', '.', './test-output/lcov.info')
       defraUtils.analyseCode(sonarQubeEnv, sonarScanner, ['sonar.projectKey' : repoName, 'sonar.sources' : '.'])
     }
     stage("Code quality gate") {
