@@ -31,7 +31,7 @@ node {
       defraUtils.runTests(imageName, BUILD_NUMBER)
     }
     stage('SonarQube analysis') {
-      sh "sed -i -e 's/\/usr\/src\/app/./g' ./test-output/lcov.info"
+      sh "sed -i -e 's/\\/usr\\/src\\/app/./g' ./test-output/lcov.info"
       defraUtils.analyseCode(sonarQubeEnv, sonarScanner, ['sonar.projectKey' : repoName, 'sonar.sources' : '.'])
     }
     stage("Code quality gate") {
