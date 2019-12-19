@@ -35,7 +35,7 @@ node {
       defraUtils.runTests(imageName, BUILD_NUMBER)
     }
     stage('SonarQube analysis') {
-      replaceInFile('\/usr\/src\/app', '.', './test-output/lcov.info')
+      replaceInFile('\\/usr\\/src\\/app', '.', './test-output/lcov.info')
       defraUtils.analyseCode(sonarQubeEnv, sonarScanner, ['sonar.projectKey' : repoName, 'sonar.sources' : '.'])
     }
     stage("Code quality gate") {
