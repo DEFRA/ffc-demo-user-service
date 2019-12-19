@@ -12,6 +12,9 @@ def mergedPrNo = ''
 def containerTag = ''
 def sonarQubeEnv = 'SonarQube'
 def sonarScanner = 'SonarScanner'
+def containerSrcFolder = '\\/usr\\/src\\/app'
+def localSrcFolder = '.'
+def lcovFile = './test-output/lcov.info'
 def timeoutInMinutes = 5
 
 def replaceInFile(from, to, file) {
@@ -35,7 +38,7 @@ node {
       defraUtils.runTests(imageName, BUILD_NUMBER)
     }
     stage('SonarQube analysis') {
-      replaceInFile('\\/usr\\/src\\/app', '.', './test-output/lcov.info')
+      replaceInFile(containerSrcFolder, localSrcFolder, lcovFile)
       defraUtils.analyseCode(sonarQubeEnv, sonarScanner, ['sonar.projectKey' : repoName, 'sonar.sources' : '.'])
     }
     stage("Code quality gate") {
