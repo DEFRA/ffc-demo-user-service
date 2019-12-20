@@ -1,4 +1,4 @@
-@Library('defra-library@separate-test-cleanup')
+@Library('defra-library@0.0.7')
 import uk.gov.defra.ffc.DefraUtils
 def defraUtils = new DefraUtils()
 
