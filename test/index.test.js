@@ -46,7 +46,7 @@ describe('Web test', () => {
     }
 
     const response = await server.inject(options)
-    expect(response.statusCode).toBe(500)
+    expect(response.statusCode).toBe(200)
   })
 
   afterEach(async () => {
