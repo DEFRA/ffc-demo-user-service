@@ -36,8 +36,6 @@ def getExtraCommands(pr) {
   }
 }
 
-def extraCommands = getExtraCommands(pr)
-
 node {
   checkout scm
   try {
@@ -68,7 +66,7 @@ node {
     }
     if (pr != '') {
       stage('Helm install') {
-        defraUtils.deployChart(kubeCredsId, registry, imageName, containerTag, extraCommands)
+        defraUtils.deployChart(kubeCredsId, registry, imageName, containerTag, getExtraCommands(pr))
       }
     }
     if (pr == '') {
