@@ -17,6 +17,27 @@ def localSrcFolder = '.'
 def lcovFile = './test-output/lcov.info'
 def timeoutInMinutes = 5
 
+def getExtraCommands(pr) {
+    withCredentials([
+      string(credentialsId: 'postgresExternalNameUserPR', variable: 'postgresExternalName'),
+      usernamePassword(credentialsId: 'postgresUserPR', usernameVariable: 'postgresUsername', passwordVariable: 'postgresPassword'),
+    ]) {
+    def helmValues = [
+      /container.redeployOnChange="$pr-$BUILD_NUMBER"/,
+      /postgresExternalName="$postgresExternalName"/,
+      /postgresUsername="$postgresUsername"/,
+      /postgresPassword="$postgresPassword"/
+    ].join(',')
+    
+    return [
+      "--values ./helm/ffc-demo-user-service/jenkins-aws.yaml",
+      "--set $helmValues"
+    ].join(' ')
+  }
+}
+
+def extraCommands = getExtraCommands(pr)
+
 node {
   checkout scm
   try {
@@ -47,13 +68,7 @@ node {
     }
     if (pr != '') {
       stage('Helm install') {
-        withCredentials([
-            string(credentialsId: 'postgresExternalNameUserPR', variable: 'postgresExternalName'),
-            usernamePassword(credentialsId: 'postgresUserPR', usernameVariable: 'postgresUsername', passwordVariable: 'postgresPassword'),
-          ]) {
-          def extraCommands = "--values ./helm/ffc-demo-user-service/jenkins-aws.yaml --set postgresExternalName=\"$postgresExternalName\",postgresUsername=\"$postgresUsername\",postgresPassword=\"$postgresPassword\""
-          defraUtils.deployChart(kubeCredsId, registry, imageName, containerTag, extraCommands)
-        }
+        defraUtils.deployChart(kubeCredsId, registry, imageName, containerTag, extraCommands)
       }
     }
     if (pr == '') {
