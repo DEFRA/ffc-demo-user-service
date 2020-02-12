@@ -1,4 +1,4 @@
-@Library('defra-library@0.0.9')
+@Library('defra-library@psd-474-validate-version-increment')
 import uk.gov.defra.ffc.DefraUtils
 def defraUtils = new DefraUtils()
 
@@ -39,8 +39,17 @@ def getExtraCommands(pr) {
 node {
   checkout scm
   try {
+    stage('verify version incremented') {
+      def masterVersion = defraUtils.getPackageJsonVersionMaster()
+      def version = defraUtils.getPackageJsonVersion()
+      if (defraUtils.versionHasIncremented(masterVersion, version)) {
+        echo "version change valid '$masterVersion' -> '$version'"
+      } else {
+        error( "version change invalid '$masterVersion' -> '$version'")
+      }
+    }
     stage('Set branch, PR, and containerTag variables') {
-      (pr, containerTag, mergedPrNo) = defraUtils.getVariables(repoName)
+      (pr, containerTag, mergedPrNo) = defraUtils.getVariables(repoName, defraUtils.getPackageJsonVersion())
       defraUtils.setGithubStatusPending()
     }
     stage('Helm lint') {
