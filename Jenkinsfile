@@ -39,9 +39,9 @@ def getExtraCommands(pr) {
 node {
   checkout scm
   try {
-    stage('verify version incremented') {
-      defraUtils.verifyPackageJsonVersionIncremented()
-    }
+    // stage('verify version incremented') {
+    //   defraUtils.verifyPackageJsonVersionIncremented()
+    // }
     stage('Set branch, PR, and containerTag variables') {
       (pr, containerTag, mergedPrNo) = defraUtils.getVariables(repoName, defraUtils.getPackageJsonVersion())
       defraUtils.setGithubStatusPending()
