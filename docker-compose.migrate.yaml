@@ -5,12 +5,8 @@ version: '3.7'
 
 services:
   ffc-demo-user-service:
-    environment:
-      NODE_ENV: development
-      POSTGRES_DB:
-      POSTGRES_PASSWORD:
-      POSTGRES_USERNAME:
-      POSTGRES_HOST:
-      POSTGRES_PORT:
-    command: sh -c "npm run migrate"
+    build: 
+      context: .
+      target: development
+    command: sh -c "scripts/wait-for/wait-for ffc-demo-user-postgres:5432 -- npm run migrate"
 

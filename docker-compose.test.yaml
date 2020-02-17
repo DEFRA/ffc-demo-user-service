@@ -5,6 +5,9 @@ version: '3.7'
 
 services:
   ffc-demo-user-service:
+    build: 
+      context: .
+      target: development
     command: sh -c "scripts/wait-for/wait-for ffc-demo-user-postgres:5432 -- npm run migrate && npm run test"
     environment:
       NODE_ENV: test
