@@ -5,10 +5,13 @@ version: '3.7'
 
 services:
   ffc-demo-user-service:
+    build: 
+      context: .
+      target: development
     command: sh -c "scripts/wait-for/wait-for ffc-demo-user-postgres:5432 -- npm run migrate && npm run test"
     environment:
       NODE_ENV: test
     volumes:
-      - ./test/:/usr/src/app/test/
-      - ./test-output/:/usr/src/app/test-output/
-      - ./jest.config.js:/usr/src/app/jest.config.js
+      - ./test/:/home/node/test/
+      - ./test-output/:/home/node/test-output/
+      - ./jest.config.js:/home/node/jest.config.js
