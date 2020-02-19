@@ -1,6 +1,5 @@
 ARG PARENT_VERSION=1.0.0-node12.16.0
 ARG PORT=3002
-ARG PORT_DEBUG=9229
 ARG REGISTRY=562955126301.dkr.ecr.eu-west-2.amazonaws.com
 
 # Development
@@ -10,7 +9,7 @@ ARG REGISTRY
 LABEL uk.gov.defra.ffc.parent-image=${REGISTRY}/ffc-node-development:${PARENT_VERSION}
 ARG PORT
 ENV PORT ${PORT}
-ARG PORT_DEBUG
+ARG PORT_DEBUG=9229
 EXPOSE ${PORT} ${PORT_DEBUG}
 COPY --chown=node:node package*.json ./
 RUN npm install
