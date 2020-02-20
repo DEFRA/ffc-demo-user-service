@@ -1,9 +1,10 @@
 version: '3.7'
 services:
   ffc-demo-user-service:
-    build: .
+    build: 
+      context: .
+      target: production
     image: ffc-demo-user-service
-    command: sh -c "scripts/wait-for/wait-for ffc-demo-user-postgres:5432 -- npm run migrate && npm run start:watch"
     depends_on:
       - ffc-demo-user-postgres
     environment:
@@ -15,8 +16,9 @@ services:
     networks:
       - ffc-demo-users
     volumes:
-      - node_modules:/usr/src/app/node_modules
-      - .:/usr/src/app
+      - ./server/:/home/node/server/
+      - ./index.js:/home/node/index.js
+      - ./package.json:/home/node/package.json
 
   ffc-demo-user-postgres:
     image: postgres:11.4-alpine
