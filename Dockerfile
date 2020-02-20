@@ -27,4 +27,5 @@ EXPOSE ${PORT}
 COPY --from=development /home/node/index.js /home/node/package*.json  /home/node/.sequelizerc /home/node/
 COPY --from=development /home/node/server  /home/node/server
 RUN npm ci
+RUN npm install sequelize-cli@^5.5.1
 CMD [ "node", "index.js" ]
