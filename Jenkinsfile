@@ -15,8 +15,8 @@ def timeoutInMinutes = 5
 
 def getExtraCommands(pr) {
     withCredentials([
-      string(credentialsId: 'postgresExternalNameUserPR', variable: 'postgresExternalName'),
-      usernamePassword(credentialsId: 'postgresUserPR', usernameVariable: 'postgresUsername', passwordVariable: 'postgresPassword'),
+      string(credentialsId: 'postgres-external-name-pr', variable: 'postgresExternalName'),
+      usernamePassword(credentialsId: 'user-service-postgres-user-pr', usernameVariable: 'postgresUsername', passwordVariable: 'postgresPassword'),
     ]) {
     def helmValues = [
       /container.redeployOnChange="$pr-$BUILD_NUMBER"/,
@@ -79,17 +79,17 @@ node {
       }
       stage('Trigger GitHub release') {
         withCredentials([
-          string(credentialsId: 'github_ffc_platform_repo', variable: 'gitToken') 
+          string(credentialsId: 'github-auth-token', variable: 'gitToken') 
         ]) {
           defraUtils.triggerRelease(containerTag, serviceName, containerTag, gitToken)
         }
       }
       stage('Trigger Deployment') {
         withCredentials([
-          string(credentialsId: 'JenkinsDeployUrl', variable: 'jenkinsDeployUrl'),
-          string(credentialsId: 'ffc-demo-user-service-deploy-token', variable: 'jenkinsToken')
+          string(credentialsId: 'user-service-deploy-token', variable: 'jenkinsToken'),
+          string(credentialsId: 'user-service-job-deploy-name', variable: 'deployJobName')
         ]) {
-          defraUtils.triggerDeploy(jenkinsDeployUrl, 'ffc-demo-user-service-deploy', jenkinsToken, ['chartVersion': containerTag])
+          defraUtils.triggerDeploy(JENKINS_DEPLOY_SITE_ROOT, deployJobName, jenkinsToken, ['chartVersion': containerTag])
         }
       }
     }
