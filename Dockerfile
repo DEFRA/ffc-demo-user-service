@@ -1,22 +1,30 @@
-FROM node:10.15.3-alpine
+ARG PARENT_VERSION=1.0.0-node12.16.0
+ARG PORT=3002
+ARG REGISTRY=562955126301.dkr.ecr.eu-west-2.amazonaws.com
 
-WORKDIR /usr/src/app
-RUN chown node:node /usr/src/app
-
-USER node
-
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
+# Development
+FROM ${REGISTRY}/ffc-node-development:${PARENT_VERSION} AS development
+ARG PARENT_VERSION
+ARG REGISTRY
+LABEL uk.gov.defra.ffc.parent-image=${REGISTRY}/ffc-node-development:${PARENT_VERSION}
+ARG PORT
+ENV PORT ${PORT}
+ARG PORT_DEBUG=9229
+EXPOSE ${PORT} ${PORT_DEBUG}
 COPY --chown=node:node package*.json ./
 RUN npm install
-# If you are building your code for production
-# RUN npm ci --only=production
-
-# Bundle app source
 COPY --chown=node:node . .
+CMD [ "npm", "run", "start:watch" ]
 
-ARG PORT=3002
+# Production
+FROM ${REGISTRY}/ffc-node:${PARENT_VERSION} AS production
+ARG PARENT_VERSION
+ARG REGISTRY
+LABEL uk.gov.defra.ffc.parent-image=${REGISTRY}/ffc-node:${PARENT_VERSION}
+ARG PORT
 ENV PORT ${PORT}
-EXPOSE ${PORT} 9229 9230
-CMD [ "node", "index" ]
+EXPOSE ${PORT}
+COPY --from=development /home/node/index.js /home/node/package*.json  /home/node/.sequelizerc /home/node/
+COPY --from=development /home/node/server  /home/node/server
+RUN npm ci
+CMD [ "node", "index.js" ]

@@ -1,8 +1,12 @@
 version: '3.7'
 services:
   ffc-demo-user-service:
+    build: 
+      context: .
+      target: development
+    command: sh -c "scripts/wait-for/wait-for ffc-demo-user-postgres:5432 -- npm run migrate && npm run start:watch"
     ports:
       - "3002:3002"
     volumes:
-      - node_modules:/usr/src/app/node_modules
-      - .:/usr/src/app
+      - node_modules:/home/node/node_modules
+      - .:/home/node

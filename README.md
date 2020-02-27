@@ -107,11 +107,12 @@ Sample valid JSON for the `/register` endpoint is:
 }
 ```
 
+
 ### Link to sibling services
 
-To test interactions with sibling services in the FFC demo application, it is necessary to connect each service to an external Docker network, along with shared dependencies such as message queues. The most convenient approach for this is to start the entire application stack from the [`mine-support-development`](https://github.com/DEFRA/mine-support-development) repository.
+To test interactions with sibling services in the FFC demo application, it is necessary to connect each service to an external Docker network, along with shared dependencies such as message queues. The most convenient approach for this is to start the entire application stack from the [`ffc-demo-development`](https://github.com/DEFRA/ffc-demo-development) repository.
 
-It is also possible to run a limited subset of the application stack, using the [`start`](./scripts/start) script's `--link` flag to join each service to the shared Docker network. See the [`mine-support-development`](https://github.com/DEFRA/mine-support-development) Readme for instructions.
+It is also possible to run a limited subset of the application stack. See the [`ffc-demo-development`](https://github.com/DEFRA/ffc-demo-development) Readme for instructions.
 
 ### Deploy to Kubernetes
 

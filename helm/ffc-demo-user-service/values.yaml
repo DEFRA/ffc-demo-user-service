@@ -1,4 +1,4 @@
-environment: development
+environment: production
 name: ffc-demo-user-service
 image: ffc-demo-user-service
 imagePullSecret:
