@@ -1,5 +1,6 @@
 environment: production
 name: ffc-demo-user-service
+namespace: ffc-demo
 imagePullSecret: myregistrykey
 container:
   allowPrivilegeEscalation: true
