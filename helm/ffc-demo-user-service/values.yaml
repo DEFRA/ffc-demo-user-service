@@ -1,5 +1,6 @@
 environment: production
 name: ffc-demo-user-service
+namespace: ffc-demo
 image: ffc-demo-user-service
 imagePullSecret:
 postgresUsername: postgres@mine-support2
