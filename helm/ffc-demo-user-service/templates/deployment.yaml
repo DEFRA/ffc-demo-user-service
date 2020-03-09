@@ -2,6 +2,13 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: {{ quote .Values.name }}
+  labels:
+    app.kubernetes.io/name: ffc-demo-user-service
+    app.kubernetes.io/instance: ffc-demo-user-service-hssh
+    app.kubernetes.io/version: "1.0.0"
+    app.kubernetes.io/component: service
+    app.kubernetes.io/part-of: ffc-demo
+    app.kubernetes.io/managed-by: helm
 spec:
   replicas: {{ .Values.replicaCount }}
   minReadySeconds: {{ .Values.minReadySeconds }}
