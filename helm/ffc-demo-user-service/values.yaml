@@ -2,6 +2,14 @@ environment: development
 name: ffc-demo-user-service
 image: ffc-demo-user-service
 imagePullSecret:
+metadata:
+  labels:
+    app.kubernetes.io/name: ffc-demo-user-service
+    app.kubernetes.io/instance: ffc-demo-user-service-hssh
+    app.kubernetes.io/version: "1.0.0"
+    app.kubernetes.io/component: service
+    app.kubernetes.io/part-of: ffc-demo
+    app.kubernetes.io/managed-by: helm
 postgresUsername: postgres@mine-support2
 postgresPassword: changeme
 postgresDatabase: mine_users
