@@ -1,4 +1,4 @@
-@Library('defra-library@3.0.0')
+@Library('defra-library@3.0.1')
 import uk.gov.defra.ffc.DefraUtils
 def defraUtils = new DefraUtils()
 
@@ -24,7 +24,7 @@ def getExtraCommands(pr) {
       /postgresUsername="$postgresUsername"/,
       /postgresPassword="$postgresPassword"/
     ].join(',')
-    
+
     return [
       "--values ./helm/ffc-demo-user-service/jenkins-aws.yaml",
       "--set $helmValues"
@@ -79,7 +79,7 @@ node {
       }
       stage('Trigger GitHub release') {
         withCredentials([
-          string(credentialsId: 'github-auth-token', variable: 'gitToken') 
+          string(credentialsId: 'github-auth-token', variable: 'gitToken')
         ]) {
           defraUtils.triggerRelease(containerTag, serviceName, containerTag, gitToken)
         }
@@ -100,7 +100,7 @@ node {
     }
     stage('Set GitHub status as success'){
       defraUtils.setGithubStatusSuccess()
-    } 
+    }
   } catch(e) {
     defraUtils.setGithubStatusFailure(e.message)
     defraUtils.notifySlackBuildFailure(e.message, "#generalbuildfailures")
