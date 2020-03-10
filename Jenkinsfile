@@ -26,7 +26,8 @@ def getExtraCommands(pr) {
       /container.redeployOnChange="$pr-$BUILD_NUMBER"/,
       /postgresExternalName="$postgresExternalName"/,
       /postgresUsername="$postgresUsername"/,
-      /postgresPassword="$postgresPassword"/
+      /postgresPassword="$postgresPassword"/,
+      /labels.version="$containerTag"/
     ].join(',')
     
     return [

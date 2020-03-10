@@ -2,6 +2,11 @@ environment: development
 name: ffc-demo-user-service
 image: ffc-demo-user-service
 imagePullSecret:
+labels:
+  instance:
+  version: 1.0.0
+  component: service
+  managedBy: helm
 postgresUsername: postgres@mine-support2
 postgresPassword: changeme
 postgresDatabase: mine_users
