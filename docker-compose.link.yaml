@@ -5,6 +5,10 @@ version: '3.7'
 
 services:
   ffc-demo-user-service:
+    build: 
+      context: .
+      target: development
+    command: sh -c "scripts/wait-for/wait-for ffc-demo-user-postgres:5432 -- npm run migrate && node index"
     ports:
       - "3002:3002"
     networks:
