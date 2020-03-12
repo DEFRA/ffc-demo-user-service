@@ -55,19 +55,20 @@ node {
           string(credentialsId: 'postgres-external-name-pr', variable: 'postgresExternalName'),
           usernamePassword(credentialsId: 'user-service-postgres-user-pr', usernameVariable: 'postgresUsername', passwordVariable: 'postgresPassword'),
         ]) {
-        def helmValues = [
-          /container.redeployOnChange="$pr-$BUILD_NUMBER"/,
-          /postgresExternalName="$postgresExternalName"/,
-          /postgresUsername="$postgresUsername"/,
-          /postgresPassword="$postgresPassword"/,
-          /labels.version="$containerTag"/
-        ].join(',')
+          def helmValues = [
+            /container.redeployOnChange="$pr-$BUILD_NUMBER"/,
+            /postgresExternalName="$postgresExternalName"/,
+            /postgresUsername="$postgresUsername"/,
+            /postgresPassword="$postgresPassword"/,
+            /labels.version="$containerTag"/
+          ].join(',')
 
-        def extraCommands = [
-          "--values ./helm/ffc-demo-user-service/jenkins-aws.yaml",
-          "--set $helmValues"
-        ].join(' ')
-        defraUtils.deployChart(KUBE_CREDENTIALS_ID, DOCKER_REGISTRY, serviceName, containerTag, extraCommands)
+          def extraCommands = [
+            "--values ./helm/ffc-demo-user-service/jenkins-aws.yaml",
+            "--set $helmValues"
+          ].join(' ')
+          defraUtils.deployChart(KUBE_CREDENTIALS_ID, DOCKER_REGISTRY, serviceName, containerTag, extraCommands)
+        }
       }
     }
     if (pr == '') {
