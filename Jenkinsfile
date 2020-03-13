@@ -13,16 +13,17 @@ def sonarQubeEnv = 'SonarQube'
 def sonarScanner = 'SonarScanner'
 def timeoutInMinutes = 5
 
-def getExtraCommands(pr) {
-    withCredentials([
-      string(credentialsId: 'postgres-external-name-pr', variable: 'postgresExternalName'),
-      usernamePassword(credentialsId: 'user-service-postgres-user-pr', usernameVariable: 'postgresUsername', passwordVariable: 'postgresPassword'),
-    ]) {
+def getExtraCommands(pr, containerTag) {
+  withCredentials([
+    string(credentialsId: 'postgres-external-name-pr', variable: 'postgresExternalName'),
+    usernamePassword(credentialsId: 'user-service-postgres-user-pr', usernameVariable: 'postgresUsername', passwordVariable: 'postgresPassword'),
+  ]) {
     def helmValues = [
       /container.redeployOnChange="$pr-$BUILD_NUMBER"/,
       /postgresExternalName="$postgresExternalName"/,
       /postgresUsername="$postgresUsername"/,
-      /postgresPassword="$postgresPassword"/
+      /postgresPassword="$postgresPassword"/,
+      /labels.version="$containerTag"/
     ].join(',')
 
     return [
@@ -69,8 +70,8 @@ node {
       stage('Verify version incremented') {
         defraUtils.verifyPackageJsonVersionIncremented()
       }
-      stage('Helm install') {
-        defraUtils.deployChart(KUBE_CREDENTIALS_ID, DOCKER_REGISTRY, serviceName, containerTag, getExtraCommands(pr))
+      stage('Helm install') {        
+        defraUtils.deployChart(KUBE_CREDENTIALS_ID, DOCKER_REGISTRY, serviceName, containerTag, getExtraCommands(pr, containerTag))        
       }
     }
     if (pr == '') {
