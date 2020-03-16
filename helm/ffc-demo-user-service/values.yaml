@@ -1,6 +1,7 @@
 environment: production
 name: ffc-demo-user-service
 namespace: ffc-demo
+workstream: ffc-demo
 image: ffc-demo-user-service
 imagePullSecret:
 labels:
