@@ -40,6 +40,13 @@ spec:
               value: {{ quote .Values.postgresHost }}
             - name: POSTGRES_PORT
               value: {{ quote .Values.postgresPort }}
+          resources:
+            requests:
+              memory: {{ quote .Values.container.requestMemory }}
+              cpu: {{ quote .Values.container.requestCpu }}
+            limits:
+              memory: {{ quote .Values.container.limitMemory }}
+              cpu: {{ quote .Values.container.limitCpu }}
       containers:
         - name: {{ quote .Values.name }}
           image: {{ quote .Values.image }}
@@ -65,11 +72,11 @@ spec:
               protocol: TCP
           resources:
             requests:
-                memory: {{ quote .Values.container.requestMemory }}
-                cpu: {{ quote .Values.container.requestCpu }}
+              memory: {{ quote .Values.container.requestMemory }}
+              cpu: {{ quote .Values.container.requestCpu }}
             limits:
-                memory: {{ quote .Values.container.limitMemory }}
-                cpu: {{ quote .Values.container.limitCpu }}
+              memory: {{ quote .Values.container.limitMemory }}
+              cpu: {{ quote .Values.container.limitCpu }}
           env:
             - name: NODE_ENV
               value: {{ quote .Values.environment }}
