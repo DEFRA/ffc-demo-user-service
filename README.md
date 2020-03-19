@@ -32,6 +32,18 @@ The following environment variables are required by the application container. V
 | POSTGRES_HOST     | Postgres host     | yes      |             |                           |       |
 | POSTGRES_PORT     | Postgres port     | yes      |             |                           |       |
 
+## Building the project locally
+
+To build the project locally the Docker client must be authenticated against the private Defra container registry to retrieve the parent image.
+An ECR registry provides exact commands for authenticating the Docker client.
+These can be found by selecting a repository and clicking the `View push commands` button.
+
+The environment variable `DOCKER_REGISTRY` must be set to the registry holding the Defra parent image,
+i.e.
+```
+export DOCKER_REGISTRY=registryid.myprivatedockersite.com
+```
+
 ## How to run tests
 
 A convenience script is provided to run automated tests in a containerised environment. The first time this is run, container images required for testing will be automatically built. An optional `--build` (or `-b`) flag may be used to rebuild these images in future (for example, to apply dependency updates).
