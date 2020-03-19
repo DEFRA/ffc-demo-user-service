@@ -12,6 +12,10 @@ spec:
     rollingUpdate:
       maxSurge: {{ .Values.maxSurge }}
       maxUnavailable: {{ .Values.maxUnavailable }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ quote .Values.name }}
+      app: {{ quote .Values.namespace }}
   template:
     metadata:
       labels: {{ include "ffc-demo.labels" . | trimSuffix "\n" | indent 6 }}
