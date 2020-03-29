@@ -1,0 +1,16 @@
+{{- define "ffc-demo-user-service.init-container" -}}
+name:  "{{ .Values.name }}-migrate"
+image: {{ quote .Values.image }}
+command: ['npm', 'run', 'migrate']
+env:
+- name: POSTGRES_USERNAME
+  value: {{ quote .Values.postgresUsername }}
+- name: POSTGRES_PASSWORD
+  value: {{ quote .Values.postgresPassword }}
+- name: POSTGRES_DB
+  value: {{ quote .Values.postgresDatabase }}
+- name: POSTGRES_HOST
+  value: {{ quote .Values.postgresHost }}
+- name: POSTGRES_PORT
+  value: {{ quote .Values.postgresPort }}
+{{- end -}}

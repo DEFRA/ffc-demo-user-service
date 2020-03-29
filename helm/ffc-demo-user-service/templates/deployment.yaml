@@ -1,61 +1,10 @@
-{{- include "ffc-helm-library.deployment" (list . "ffc-demo-user-service.deployment") -}}
+{{- template "ffc-helm-library.deployment" (list . "ffc-demo-user-service.deployment") -}}
 {{- define "ffc-demo-user-service.deployment" -}}
 spec:
   template:
     spec:
       initContainers:
-      - name:  "{{ .Values.name }}-migrate"
-        image: {{ quote .Values.image }}
-        command: ['npm', 'run', 'migrate']
-        env:
-        - name: POSTGRES_USERNAME
-          value: {{ quote .Values.postgresUsername }}
-        - name: POSTGRES_PASSWORD
-          value: {{ quote .Values.postgresPassword }}
-        - name: POSTGRES_DB
-          value: {{ quote .Values.postgresDatabase }}
-        - name: POSTGRES_HOST
-          value: {{ quote .Values.postgresHost }}
-        - name: POSTGRES_PORT
-          value: {{ quote .Values.postgresPort }}
-        resources:
-          requests:
-            memory: {{ quote .Values.container.requestMemory }}
-            cpu: {{ quote .Values.container.requestCpu }}
-          limits:
-            memory: {{ quote .Values.container.limitMemory }}
-            cpu: {{ quote .Values.container.limitCpu }}
+      - {{ template "ffc-helm-library.container" (list . "ffc-demo-user-service.init-container") }}
       containers:
-      - name: {{ quote .Values.name }}
-        env:
-        - name: NODE_ENV
-          value: {{ quote .Values.environment }}
-        - name: POSTGRES_USERNAME
-          value: {{ quote .Values.postgresUsername }}
-        - name: POSTGRES_PASSWORD
-          value: {{ quote .Values.postgresPassword }}
-        - name: POSTGRES_DB
-          value: {{ quote .Values.postgresDatabase }}
-        - name: POSTGRES_HOST
-          value: {{ quote .Values.postgresHost }}
-        - name: POSTGRES_PORT
-          value: {{ quote .Values.postgresPort }}
-        - name: PORT
-          value: {{ .Values.container.port }}
-        ports:
-        - containerPort: {{ .Values.container.port }}
-        livenessProbe:
-          httpGet:
-            path: {{ quote .Values.livenessProbe.path }}
-            port: {{ .Values.livenessProbe.port }}
-          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
-          failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
-        readinessProbe:
-          httpGet:
-            path: {{ quote .Values.readinessProbe.path }}
-            port: {{ .Values.readinessProbe.port }}
-          initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
-          failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+      - {{ template "ffc-helm-library.container" (list . "ffc-demo-user-service.container") }}
 {{- end -}}

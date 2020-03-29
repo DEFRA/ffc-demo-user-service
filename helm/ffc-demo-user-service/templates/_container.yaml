@@ -1,0 +1,34 @@
+{{- define "ffc-demo-user-service.container" -}}
+name: {{ quote .Values.name }}
+env:
+- name: NODE_ENV
+  value: {{ quote .Values.environment }}
+- name: POSTGRES_USERNAME
+  value: {{ quote .Values.postgresUsername }}
+- name: POSTGRES_PASSWORD
+  value: {{ quote .Values.postgresPassword }}
+- name: POSTGRES_DB
+  value: {{ quote .Values.postgresDatabase }}
+- name: POSTGRES_HOST
+  value: {{ quote .Values.postgresHost }}
+- name: POSTGRES_PORT
+  value: {{ quote .Values.postgresPort }}
+- name: PORT
+  value: {{ .Values.container.port }}
+ports:
+- containerPort: {{ .Values.container.port }}
+livenessProbe:
+  httpGet:
+    path: {{ quote .Values.livenessProbe.path }}
+    port: {{ .Values.livenessProbe.port }}
+  initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+  periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+  failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+readinessProbe:
+  httpGet:
+    path: {{ quote .Values.readinessProbe.path }}
+    port: {{ .Values.readinessProbe.port }}
+  initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+  periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+  failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+{{- end -}}
