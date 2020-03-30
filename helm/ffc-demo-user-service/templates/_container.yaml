@@ -14,7 +14,7 @@ env:
 - name: POSTGRES_PORT
   value: {{ quote .Values.postgresPort }}
 - name: PORT
-  value: {{ .Values.container.port }}
+  value: {{ quote .Values.container.port }}
 ports:
 - containerPort: {{ .Values.container.port }}
 livenessProbe:
