@@ -1,7 +1,7 @@
 {
   "name": "ffc-demo-user-service",
   "description": "Digital service mock to claim public money in the event property subsides into mine shaft.",
-  "version": "1.0.16",
+  "version": "1.0.17",
   "repository": {
     "type": "git",
     "url": "https://github.com/DEFRA/mine-support-user-service.git"
