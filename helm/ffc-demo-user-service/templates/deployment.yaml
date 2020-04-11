@@ -1,10 +1,10 @@
-{{- template "ffc-helm-library.deployment" (list . "ffc-demo-user-service.deployment") -}}
+{{- include "ffc-helm-library.deployment" (list . "ffc-demo-user-service.deployment") -}}
 {{- define "ffc-demo-user-service.deployment" -}}
 spec:
   template:
     spec:
       initContainers:
-      - {{ template "ffc-helm-library.container" (list . "ffc-demo-user-service.init-container") }}
+      - {{ include "ffc-helm-library.container" (list . "ffc-demo-user-service.init-container") }}
       containers:
-      - {{ template "ffc-helm-library.container" (list . "ffc-demo-user-service.container") }}
+      - {{ include "ffc-helm-library.container" (list . "ffc-demo-user-service.container") }}
 {{- end -}}

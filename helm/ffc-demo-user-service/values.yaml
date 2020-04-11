@@ -4,9 +4,7 @@ namespace: ffc-demo
 workstream: ffc-demo
 image: ffc-demo-user-service
 
-labels:
-  instance:
-  version: 1.0.0
+labels: {}
 
 serviceAccount:
   name: ffc-demo-payment-service-account
@@ -19,32 +17,33 @@ deployment:
   minReadySeconds: 5
   redeployOnChange: update this field to force a change
   imagePullSecret:
-
-container:
   runAsNonRoot: true
   runAsUser: 1000
+
+container:
+  imagePullPolicy: IfNotPresent
   readOnlyRootFilesystem: true
   allowPrivilegeEscalation: false
   requestMemory: 60Mi
   requestCpu: 40m
   limitMemory: 120Mi
   limitCpu: 80m
-  restartPolicy: Always
   command: ["/bin/sh", "-c"]
   args: ["node index"]
   port: 3002
 
-postgresUsername: postgres@mine-support2
-postgresPassword: changeme
-postgresDatabase: mine_users
-# postgresHost is the host name of the PostgreSQL service
-postgresHost: ffc-demo-user-postgres
-# postgresExternalName is the external host name to which PostgreSQL
-# requests should be forwarded. If empty, PostgreSQL is assumed to be
-# within the cluster and accessible via postgresHost
-postgresExternalName:
-postgresPort: 5432
-  
+postgresService:
+  postgresUsername: postgres@mine-support2
+  postgresPassword: changeme
+  postgresDatabase: mine_users
+  # postgresHost is the host name of the PostgreSQL service
+  postgresHost: ffc-demo-user-postgres
+  # postgresExternalName is the external host name to which PostgreSQL
+  # requests should be forwarded. If empty, PostgreSQL is assumed to be
+  # within the cluster and accessible via postgresHost
+  postgresExternalName:
+  postgresPort: 5432
+
 readinessProbe:
   path: /healthy
   port: 3002
