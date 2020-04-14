@@ -1,51 +1,56 @@
-environment: production
+environment: development
 name: ffc-demo-user-service
 namespace: ffc-demo
 workstream: ffc-demo
 image: ffc-demo-user-service
-imagePullSecret:
-labels:
-  instance:
-  version: 1.0.0
-  component: service
-postgresUsername: postgres@mine-support2
-postgresPassword: changeme
-postgresDatabase: mine_users
-# postgresHost is the host name of the PostgreSQL service
-postgresHost: ffc-demo-user-postgres
-# postgresExternalName is the external host name to which PostgreSQL
-# requests should be forwarded. If empty, PostgreSQL is assumed to be
-# within the cluster and accessible via postgresHost
-postgresExternalName:
-postgresPort: 5432
-service:
-  type: ClusterIP
-  port: 80
-container:
+
+labels: {}
+
+serviceAccount:
+  name: ffc-demo-payment-service-account
+  roleArn:
+
+deployment:
+  restartPolicy: Always
   priorityClassName: low
-  imagePullPolicy: IfNotPresent
+  replicas: 1
+  minReadySeconds: 5
   redeployOnChange: update this field to force a change
+  imagePullSecret:
+  runAsNonRoot: true
+  runAsUser: 1000
+
+container:
+  imagePullPolicy: IfNotPresent
+  readOnlyRootFilesystem: true
+  allowPrivilegeEscalation: false
   requestMemory: 60Mi
   requestCpu: 40m
   limitMemory: 120Mi
   limitCpu: 80m
-  runAsNonRoot: true
-  runAsUser: 1000
-  readOnlyRootFilesystem: true
-  allowPrivilegeEscalation: false
-  restartPolicy: Always
   command: ["/bin/sh", "-c"]
   args: ["node index"]
-replicaCount: 1
-minReadySeconds: 10
-maxSurge: 1
-maxUnavailable: 1
+  port: 3002
+
+postgresService:
+  postgresUsername: postgres@mine-support2
+  postgresPassword: changeme
+  postgresDatabase: mine_users
+  # postgresHost is the host name of the PostgreSQL service
+  postgresHost: ffc-demo-user-postgres
+  # postgresExternalName is the external host name to which PostgreSQL
+  # requests should be forwarded. If empty, PostgreSQL is assumed to be
+  # within the cluster and accessible via postgresHost
+  postgresExternalName:
+  postgresPort: 5432
+
 readinessProbe:
   path: /healthy
   port: 3002
   initialDelaySeconds: 40
   periodSeconds: 10
   failureThreshold: 3
+
 livenessProbe:
   path: /healthz
   port: 3002

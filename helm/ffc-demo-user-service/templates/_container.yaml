@@ -1,0 +1,22 @@
+{{- define "ffc-demo-user-service.container" -}}
+name: {{ quote .Values.name }}
+env:
+- name: NODE_ENV
+  value: {{ quote .Values.environment }}
+- name: POSTGRES_USERNAME
+  value: {{ quote .Values.postgresService.postgresUsername }}
+- name: POSTGRES_PASSWORD
+  value: {{ quote .Values.postgresService.postgresPassword }}
+- name: POSTGRES_DB
+  value: {{ quote .Values.postgresService.postgresDatabase }}
+- name: POSTGRES_HOST
+  value: {{ quote .Values.postgresService.postgresHost }}
+- name: POSTGRES_PORT
+  value: {{ quote .Values.postgresService.postgresPort }}
+- name: PORT
+  value: {{ quote .Values.container.port }}
+ports:
+- containerPort: {{ .Values.container.port }}
+livenessProbe: {{ include "ffc-helm-library.http-get-probe" (list . .Values.livenessProbe) | nindent 4}}
+readinessProbe: {{ include "ffc-helm-library.http-get-probe" (list . .Values.readinessProbe) | nindent 4}}
+{{- end -}}

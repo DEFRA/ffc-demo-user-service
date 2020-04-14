@@ -67,3 +67,5 @@ test-output
 
 #VS Code files
 .vscode
+
+helm/**/*.lock
