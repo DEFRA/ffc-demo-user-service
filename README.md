@@ -2,6 +2,8 @@
 
 # FFC Demo User Service
 
+N.B. This repo has now been archived as its functionality now exists in other services
+
 Digital service mock to claim public money in the event property subsides into mine shaft.  The user service receives user data and if it doesn’t already exist saves it in a Postgresql database table.
 
 ## Prerequisites
